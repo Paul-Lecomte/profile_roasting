@@ -1,6 +1,7 @@
 // Result page
 "use client";
 import React, { useState } from 'react';
+import getGithubUserProfile from "@/lib/github";
 
 export default function ResultPage() {
     const [username, setUsername] = useState('');
@@ -10,6 +11,7 @@ export default function ResultPage() {
         const storedUsername = localStorage.getItem('username');
         if (storedUsername) {
             setUsername(storedUsername);
+            getGithubUserProfile();
         }
     }, []);
 
