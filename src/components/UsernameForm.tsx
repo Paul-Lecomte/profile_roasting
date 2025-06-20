@@ -21,6 +21,8 @@ export default function UsernameForm() {
             localStorage.setItem('username', username);
             // reset the form
             setUsername('');
+            // redirect to the home page
+            window.location.href = '/result';
         }
     };
 
