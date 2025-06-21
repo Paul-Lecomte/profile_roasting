@@ -1,1 +1,0 @@
-// ChatGPT API roast request
