@@ -43,15 +43,29 @@
 
 ```bash
 github_roasting/
-├── app/                  # Next.js App Router structure
-│   ├── api/              # API routes
-│   └── page.tsx          # Main landing page
-├── components/           # UI components (Card, RoastOutput, etc.)
-├── lib/                  # GitHub API functions + roast logic
-├── styles/               # Tailwind config and globals
-├── public/               # Static assets
-├── types/                # TypeScript interfaces
-└── README.md             # You are here
+├── src/                      # Source code (frontend + logic)
+│   ├── app/                  # Next.js App Router
+│   │   ├── api/              # API endpoints (e.g. /api/roast)
+│   │   ├── generate-roast/   # Main landing page
+│   │   │   ├── route.ts      # API route for roasting
+│   │   ├── layout.tsx        # Layout for the app
+│   │   └── page.tsx          # Main landing page
+│   ├── components/           # UI components (Card, Input, RoastOutput…)
+│   │   ├── RoastCard.tsx
+│   │   ├── UsernameForm.tsx
+│   ├── lib/                  # GitHub API calls & roast engine
+│   │   └── github.ts
+│   └── styles/               # TailwindCSS config / global CSS
+│       ├── globals.css
+│       └── tailwind.config.js
+├── public/                   # Static assets (images, favicon)
+├── .gitignore                # Ignored files
+├── next.config.js            # Next.js config
+├── package.json              # Project metadata & dependencies
+├── tsconfig.json             # TypeScript configuration
+├── README.md                 # Project overview & instructions
+└── LICENSE                   # MIT license file
+
 ```
 
 ---
