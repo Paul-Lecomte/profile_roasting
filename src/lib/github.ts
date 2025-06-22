@@ -1,6 +1,4 @@
 // src/lib/github.ts
-import { generateRoastCardData } from "@/app/api/generate-roast/route";
-
 type Repo = {
     name: string;
     stargazers_count: number;
@@ -24,17 +22,14 @@ export default async function getGithubUserProfile() {
     const username = localStorage.getItem('username');
     if (!username) throw new Error('Username not found in local storage');
 
-    // Récupère le profil utilisateur
     const userRes = await fetch(`https://api.github.com/users/${username}`);
     if (!userRes.ok) throw new Error('Error fetching user profile');
     const user = await userRes.json();
 
-    // Récupère les dépôts publics
     const reposRes = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
     if (!reposRes.ok) throw new Error('Error fetching user repos');
     const repos: Repo[] = await reposRes.json();
 
-    // Top 2 repos par nombre d’étoiles
     const top_repos = repos
         .sort((a, b) => b.stargazers_count - a.stargazers_count)
         .slice(0, 2)
@@ -44,7 +39,6 @@ export default async function getGithubUserProfile() {
             language: r.language || "N/A"
         }));
 
-    // Langage le plus utilisé
     const langCount: Record<string, number> = {};
     repos.forEach(r => {
         if (r.language) langCount[r.language] = (langCount[r.language] || 0) + 1;
@@ -52,7 +46,6 @@ export default async function getGithubUserProfile() {
     const most_used_language = Object.entries(langCount)
         .sort((a, b) => b[1] - a[1])[0]?.[0] || "N/A";
 
-    // Objet final
     const profile: UserProfile = {
         login: user.login,
         name: user.name,
@@ -67,6 +60,16 @@ export default async function getGithubUserProfile() {
     };
 
     localStorage.setItem('githubUserProfile', JSON.stringify(profile));
-    await generateRoastCardData();
+
+    // Appel à la route API pour générer la carte
+    const roastRes = await fetch('/api/generate-roast', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profile)
+    });
+    if (!roastRes.ok) throw new Error('Error generating roast card');
+    const roastCard = await roastRes.json();
+    localStorage.setItem('roastCard', JSON.stringify(roastCard));
+
     return profile;
 }

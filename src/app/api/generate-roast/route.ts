@@ -1,8 +1,8 @@
-export async function generateRoastCardData() {
-    const raw = localStorage.getItem("githubUserProfile");
-    if (!raw) throw new Error("No GitHub profile found in localStorage.");
+// src/app/api/generate-roast/route.ts
+import { NextRequest, NextResponse } from "next/server";
 
-    const profile = JSON.parse(raw);
+export async function POST(req: NextRequest) {
+    const profile = await req.json();
 
     const prompt = `
 Roast this GitHub user like it's a parody trading card.
@@ -19,10 +19,11 @@ Generate:
 - Roast Description
 `;
 
+    const API_KEY = process.env.HUGGINGFACE_API_KEY;
     const response = await fetch("https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta", {
         method: "POST",
         headers: {
-            Authorization: `Bearer hf_API_KEY`, // Replace with your Hugging Face API key
+            Authorization: `Bearer ${API_KEY}`,
             "Content-Type": "application/json",
         },
         body: JSON.stringify({ inputs: prompt }),
@@ -31,7 +32,6 @@ Generate:
     const data = await response.json();
     const text = data[0]?.generated_text?.replace(prompt, "").trim() ?? "";
 
-    // Extraction structurée
     const roastCard = {
         name: text.match(/Name:\s*(.*)/)?.[1]?.trim() ?? "",
         title: text.match(/Title:\s*(.*)/)?.[1]?.trim() ?? "",
@@ -41,5 +41,5 @@ Generate:
         description: text.match(/Desc(?:ription)?:\s*([\s\S]*)/)?.[1]?.trim() ?? "",
     };
 
-    localStorage.setItem("roastCard", JSON.stringify(roastCard));
+    return NextResponse.json(roastCard);
 }
