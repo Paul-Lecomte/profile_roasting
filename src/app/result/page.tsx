@@ -2,6 +2,7 @@
 "use client";
 import React, { useState } from 'react';
 import getGithubUserProfile from "@/lib/github";
+import RoastCard from "@/components/RoastCard";
 
 export default function ResultPage() {
     const [username, setUsername] = useState('');
@@ -34,7 +35,9 @@ export default function ResultPage() {
                 </div>
                 {/* Espace réservé pour la carte roast */}
                 <div className="min-h-[180px] flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-indigo-200 mt-2">
-                    <span className="text-gray-400 text-base italic">Your roast card will appear here soon…</span>
+                    <span className="text-gray-400 text-base italic">
+                        <RoastCard />
+                    </span>
                 </div>
             </div>
         </div>

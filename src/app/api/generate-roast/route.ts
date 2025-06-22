@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     const profile = await req.json();
 
     const prompt = `
-Roast this GitHub user like it's a parody trading card.
+Roast this GitHub user like it's a parody trading card keep the Roast description short .
 
 GitHub Profile:
 ${JSON.stringify(profile, null, 2)}
@@ -13,10 +13,12 @@ ${JSON.stringify(profile, null, 2)}
 Generate:
 - Name
 - Title (funny dev title)
-- Strength
-- Weakness
+- Ability (A skill, 2 lines max)
+- Attack (A funny roast attack, 2 lines max)
+- Ressistance (A funny resistance, 1 word)
+- Weakness (A funny weakness, 1 word)
 - Special Move
-- Roast Description
+- Roast Description, 3 lines max
 `;
 
     const API_KEY = process.env.HUGGINGFACE_API_KEY;
@@ -35,7 +37,9 @@ Generate:
     const roastCard = {
         name: text.match(/Name:\s*(.*)/)?.[1]?.trim() ?? "",
         title: text.match(/Title:\s*(.*)/)?.[1]?.trim() ?? "",
-        strength: text.match(/Strength:\s*(.*)/)?.[1]?.trim() ?? "",
+        ability: text.match(/Ability:\s*(.*)/)?.[1]?.trim() ?? "",
+        attack: text.match(/Attack:\s*(.*)/)?.[1]?.trim() ?? "",
+        ressistance: text.match(/Ressistance:\s*(.*)/)?.[1]?.trim() ?? "",
         weakness: text.match(/Weakness:\s*(.*)/)?.[1]?.trim() ?? "",
         specialMove: text.match(/Special Move:\s*(.*)/)?.[1]?.trim() ?? "",
         description: text.match(/Desc(?:ription)?:\s*([\s\S]*)/)?.[1]?.trim() ?? "",

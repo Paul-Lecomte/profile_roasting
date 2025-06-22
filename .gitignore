@@ -43,3 +43,6 @@ next-env.d.ts
 #git
 .idea
 .git
+
+# else
+./public/card.png
