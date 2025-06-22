@@ -1,4 +1,5 @@
 // src/lib/github.ts
+import { generateRoastCardData } from "@/app/api/generate-roast/route";
 
 type Repo = {
     name: string;
@@ -66,5 +67,6 @@ export default async function getGithubUserProfile() {
     };
 
     localStorage.setItem('githubUserProfile', JSON.stringify(profile));
+    await generateRoastCardData();
     return profile;
 }
