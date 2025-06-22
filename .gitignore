@@ -46,3 +46,4 @@ next-env.d.ts
 
 # else
 ./public/card.png
+/public/card.png
