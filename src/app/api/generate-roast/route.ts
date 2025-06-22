@@ -21,7 +21,7 @@ Generate:
 - Roast Description, 3 lines max
 `;
 
-    const API_KEY = process.env.HUGGINGFACE_API_KEY;
+    const API_KEY = process.env.AIMLAPI_API_KEY;
     const response = await fetch("https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta", {
         method: "POST",
         headers: {
