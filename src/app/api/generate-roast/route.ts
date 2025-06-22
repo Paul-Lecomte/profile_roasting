@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
     const profile = await req.json();
 
     const prompt = `
-Roast this GitHub user like it's a parody trading card keep the Roast description short .
+Roast this GitHub user like it's a parody trading card keep the Roast description short.
 
 GitHub Profile:
 ${JSON.stringify(profile, null, 2)}
@@ -22,17 +22,36 @@ Generate:
 `;
 
     const API_KEY = process.env.AIMLAPI_API_KEY;
-    const response = await fetch("https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta", {
+    const response = await fetch("https://api.aimlapi.com/v1/chat/completions", {
         method: "POST",
         headers: {
             Authorization: `Bearer ${API_KEY}`,
             "Content-Type": "application/json",
+            Accept: "*/*",
         },
-        body: JSON.stringify({ inputs: prompt }),
+        body: JSON.stringify({
+            model: "mistralai/Mistral-7B-Instruct-v0.1",
+            messages: [
+                {
+                    role: "user",
+                    content: prompt,
+                    name: "user"
+                }
+            ],
+            max_tokens: 150,
+            stream: false,
+            temperature: 1,
+            top_p: 1,
+            n: 1,
+            frequency_penalty: 1,
+            presence_penalty: 1,
+            // Les autres options sont optionnelles ici
+        }),
     });
 
     const data = await response.json();
-    const text = data[0]?.generated_text?.replace(prompt, "").trim() ?? "";
+    // Le texte généré se trouve généralement dans data.choices[0].message.content
+    const text = data?.choices?.[0]?.message?.content?.trim() ?? "";
 
     const roastCard = {
         name: text.match(/Name:\s*(.*)/)?.[1]?.trim() ?? "",
