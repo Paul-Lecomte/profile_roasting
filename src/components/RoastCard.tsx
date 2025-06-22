@@ -16,7 +16,11 @@ type RoastCardData = {
     ressistance?: string;
 };
 
-export default function RoastCard() {
+type RoastCardProps = {
+    onLoaded?: () => void;
+};
+
+export default function RoastCard({ onLoaded }: RoastCardProps) {
     const [data, setData] = useState<RoastCardData | null>(null);
 
     useEffect(() => {
@@ -40,9 +44,13 @@ export default function RoastCard() {
             attackDesc: roastCard.specialMove,
             weakness: roastCard.weakness,
             bonuses: githubProfile.most_used_language,
-            ressistance: roastCard.ressistance, // Correction ici
+            ressistance: roastCard.ressistance,
         });
     }, []);
+
+    useEffect(() => {
+        if (data && onLoaded) onLoaded();
+    }, [data, onLoaded]);
 
     if (!data) {
         return (
