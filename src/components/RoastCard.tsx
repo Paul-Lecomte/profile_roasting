@@ -60,7 +60,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
     }
 
     return (
-        <div className="rounded-3xl border-4 border-[#8fd3c7] bg-[#ece9e0] w-full max-w-[400px] mx-auto shadow-xl p-0 overflow-hidden">
+        <div className="rounded-3xl border-4 border-[#8fd3c7] bg-[#ece9e0] w-full max-w-[500px] mx-auto shadow-xl p-0 overflow-hidden">
             {/* Header badges */}
             <div className="flex justify-between items-center px-4 pt-4">
                 <span className="bg-[#b6dde7] text-black font-bold px-4 py-1 rounded-full text-sm shadow-sm">
@@ -92,14 +92,14 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             </div>
             {/* Username */}
             <div className="px-6 mt-4">
-                <h2 className="text-3xl font-bold text-black">{data.username}</h2>
+                <h2 className="text-2xl font-bold text-black">{data.username}</h2>
                 <p className="text-gray-500 text-lg -mt-1">@{data.username}</p>
             </div>
             {/* Divider */}
             <hr className="my-4 border-gray-300" />
             {/* Ability */}
             <div className="px-6">
-                <h3 className="text-xl font-bold text-gray-700 mb-1">
+                <h3 className="text-lg font-bold text-gray-700 mb-1">
                     Ability : <span className="font-bold">{data.ability}</span>
                 </h3>
                 <p className="text-gray-600 text-base mb-4">{data.abilityDesc}</p>
@@ -108,7 +108,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             <hr className="my-2 border-gray-300" />
             {/* Attack */}
             <div className="px-6">
-                <h3 className="text-xl font-bold text-gray-700 mb-1">
+                <h3 className="text-lg font-bold text-gray-700 mb-1">
                     Attack : <span className="font-bold">{data.attack}</span>
                 </h3>
                 <p className="text-gray-600 text-base mb-4">{data.attackDesc}</p>
