@@ -33,14 +33,16 @@ export default function ResultPage() {
                     )}
                 </div>
                 <div className="min-h-[180px] flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-indigo-200 mt-2">
-                    {loading ? (
-                        <div className="flex flex-col items-center gap-2">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-400"></div>
-                            <span className="text-gray-400 text-base italic">Chargement de la carte…</span>
-                        </div>
-                    ) : (
+                    {/* Toujours monter RoastCard */}
+                    <div className="w-full flex items-center justify-center relative">
+                        {loading && (
+                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 bg-opacity-80 z-10">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-400"></div>
+                                <span className="text-gray-400 text-base italic">Card is loading</span>
+                            </div>
+                        )}
                         <RoastCard onLoaded={() => setLoading(false)} />
-                    )}
+                    </div>
                 </div>
             </div>
         </div>
