@@ -18,7 +18,7 @@ export default function ResultPage() {
 
     return (
         <div className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-            <div className="w-full max-w-md bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col gap-6 border border-gray-100 mx-4">
+            <div className="w-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col gap-6 border border-gray-100 mx-4">
                 <div className="flex flex-col items-center gap-2">
                     <div className="bg-gray-100 rounded-full p-3 mb-2 shadow-sm">
                         {/* ...SVG... */}
