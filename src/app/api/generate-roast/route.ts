@@ -30,7 +30,7 @@ Generate:
             Accept: "*/*",
         },
         body: JSON.stringify({
-            model: "mistralai/Mistral-7B-Instruct-v0.1",
+            model: "google/gemma-3-12b-it",
             messages: [
                 {
                     role: "user",
