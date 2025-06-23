@@ -47,12 +47,12 @@ github_roasting/
 │   ├── app/                  # Next.js App Router
 │   │   ├── api/              # API endpoints (e.g. /api/roast)
 │   │   ├── generate-roast/   # Main landing page
-│   │   │   ├── route.ts      # API route for roasting
+│   │   │   └── route.ts      # API route for roasting
 │   │   ├── layout.tsx        # Layout for the app
 │   │   └── page.tsx          # Main landing page
 │   ├── components/           # UI components (Card, Input, RoastOutput…)
 │   │   ├── RoastCard.tsx
-│   │   ├── UsernameForm.tsx
+│   │   └── UsernameForm.tsx
 │   ├── lib/                  # GitHub API calls & roast engine
 │   │   └── github.ts
 │   └── styles/               # TailwindCSS config / global CSS
