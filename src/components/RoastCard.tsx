@@ -20,6 +20,8 @@ type RoastCardProps = {
     onLoaded?: () => void;
 };
 
+const clean = (str?: string) => str?.replace(/^\*+\s*/, "") ?? "";
+
 export default function RoastCard({ onLoaded }: RoastCardProps) {
     const [data, setData] = useState<RoastCardData | null>(null);
 
@@ -32,25 +34,22 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
         const roastCard = JSON.parse(roastCardRaw);
 
         setData({
-            username: roastCard.name || githubProfile.login,
+            username: clean(roastCard.name) || githubProfile.login,
             followers: githubProfile.followers,
             following: githubProfile.following,
             avatarUrl: githubProfile.avatar_url,
-            category: roastCard.title,
+            category: clean(roastCard.title),
             hp: 100,
-            ability: roastCard.ability,
-            abilityDesc: roastCard.description,
-            attack: roastCard.attack,
-            attackDesc: roastCard.specialMove,
-            weakness: roastCard.weakness,
+            ability: clean(roastCard.ability),
+            abilityDesc: clean(roastCard.description),
+            attack: clean(roastCard.attack),
+            attackDesc: clean(roastCard.specialMove),
+            weakness: clean(roastCard.weakness),
             bonuses: githubProfile.most_used_language,
-            ressistance: roastCard.ressistance,
+            ressistance: clean(roastCard.ressistance),
         });
-    }, []);
-
-    useEffect(() => {
-        if (data && onLoaded) onLoaded();
-    }, [data, onLoaded]);
+        if (onLoaded) onLoaded();
+    }, [onLoaded]);
 
     if (!data) {
         return (
