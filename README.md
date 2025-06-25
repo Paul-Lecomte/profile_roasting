@@ -20,9 +20,8 @@
 
 ##  Features
 
--  Roast any GitHub user or repo
+-  Roast any GitHub user
 -  AI-generated personality insights based on repo activity
--  Three roast modes: `mild`, `spicy`, and `savage`
 -  Modular, easy-to-extend architecture (Next.js + TypeScript)
 -  Simple, responsive UI with TailwindCSS
 
@@ -35,7 +34,6 @@
 -  **Styling**: TailwindCSS
 -  **Data**: GitHub REST API
 -  **Logic**: Roast engine based on heuristics and templates
--  **Testing**: Vitest (optional)
 
 ---
 
@@ -111,7 +109,8 @@ You can:
 
 ## Roadmap
 
-- [ ] Add user profile roasting
+- [x] Add user profile roasting
+- [ ] Three roast modes: `mild`, `spicy`, and `savage`
 - [ ] Improve template variation with GPT-style prompts
 - [ ] Add support for GitLab and Bitbucket
 - [ ] Save/share roast cards via permalink
