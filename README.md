@@ -101,8 +101,7 @@ Roast levels:
 ## Customization
 
 You can:
-- Modify templates in `/lib/templates.ts`
-- Tune the tone logic in `/lib/roastEngine.ts`
+- Modify templates in `/app/api/roast/templates.ts`
 - Add new UI features or API endpoints
 
 ---
