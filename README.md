@@ -130,4 +130,4 @@ Huge shout-out to:
 ## License
 
 MIT © Paul Lecomte  
-See [LICENSE](LICENSE) for full details.
+See [LICENSE](./LICENSE) for full details.
