@@ -15,6 +15,10 @@ export default function UsernameForm() {
             alert("Username cannot be empty");
             return;
         }
+        //clear the localStorage to avoid conflicts
+        localStorage.removeItem("githubUserProfile");
+        localStorage.removeItem("roastCard");
+        localStorage.removeItem("username");
         localStorage.setItem("username", username);
         setUsername("");
         window.location.href = "/result";
