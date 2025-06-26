@@ -1,4 +1,3 @@
-// src/app/result/page.tsx
 "use client";
 import React, { useState } from 'react';
 import getGithubUserProfile from "@/lib/github";
@@ -7,16 +6,43 @@ import RoastCard from "@/components/RoastCard";
 export default function ResultPage() {
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(true);
+    const [showCard, setShowCard] = useState(false);
 
     React.useEffect(() => {
-        const storedUsername = localStorage.getItem('username');
-        if (storedUsername) {
+        const fetchRoast = async () => {
+            const storedUsername = localStorage.getItem('username');
+            if (!storedUsername) {
+                setLoading(false);
+                return;
+            }
             setUsername(storedUsername);
-            getGithubUserProfile();
-        }
+
+            // Récupérer le profil GitHub
+            const githubProfile = await getGithubUserProfile();
+            if (!githubProfile) {
+                setLoading(false);
+                return;
+            }
+            localStorage.setItem('githubUserProfile', JSON.stringify(githubProfile));
+
+            // Appeler l'API pour générer le roast
+            const res = await fetch('/api/generate-roast', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(githubProfile),
+            });
+
+            if (res.status === 200) {
+                const roastCard = await res.json();
+                localStorage.setItem('roastCard', JSON.stringify(roastCard));
+                setShowCard(true);
+            }
+            setLoading(false);
+        };
+
+        fetchRoast();
     }, []);
 
-    //clear localStorage on page reload
     React.useEffect(() => {
         return () => {
             localStorage.removeItem('githubUserProfile');
@@ -42,7 +68,6 @@ export default function ResultPage() {
                     )}
                 </div>
                 <div className="min-h-[180px] flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-indigo-200 mt-2">
-                    {/* Toujours monter RoastCard */}
                     <div className="w-full flex items-center justify-center relative">
                         {loading && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 bg-opacity-80 z-10">
@@ -50,7 +75,7 @@ export default function ResultPage() {
                                 <span className="text-gray-400 text-base italic">Card is loading</span>
                             </div>
                         )}
-                        <RoastCard onLoaded={() => setLoading(false)} />
+                        {showCard && !loading && <RoastCard />}
                     </div>
                 </div>
             </div>
