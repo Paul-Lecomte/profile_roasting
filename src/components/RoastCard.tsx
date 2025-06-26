@@ -39,7 +39,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             following: githubProfile.following,
             avatarUrl: githubProfile.avatar_url,
             category: clean(roastCard.title),
-            hp: 100,
+            hp: githubProfile.followers * 2 + githubProfile.following,
             ability: clean(roastCard.ability),
             abilityDesc: clean(roastCard.description),
             attack: clean(roastCard.attack),
