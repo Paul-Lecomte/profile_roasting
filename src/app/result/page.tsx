@@ -16,6 +16,15 @@ export default function ResultPage() {
         }
     }, []);
 
+    //clear localStorage on page reload
+    React.useEffect(() => {
+        return () => {
+            localStorage.removeItem('githubUserProfile');
+            localStorage.removeItem('roastCard');
+            localStorage.removeItem('username');
+        };
+    }, []);
+
     return (
         <div className="w-screen h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
             <div className="w-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col gap-6 border border-gray-100 mx-4">
