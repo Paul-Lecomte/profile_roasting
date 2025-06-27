@@ -33,6 +33,7 @@
 -  **Language**: TypeScript
 -  **Styling**: TailwindCSS
 -  **Data**: GitHub REST API
+-  **AI used**: Gemini-2.0-flash API - with custom prompts
 -  **Logic**: Roast engine based on heuristics and templates
 
 ---
@@ -70,18 +71,32 @@ github_roasting/
 
 ## Getting Started
 
+
+## Clone the repo
 ```bash
-# Clone the repo
 git clone https://github.com/Paul-Lecomte/github_roasting.git
-cd github_roasting
-
-# Install dependencies
-npm install
-
-# Run locally
-npm run dev
 ```
 
+```bash
+cd github_roasting
+```
+
+## Install dependencies
+```bash
+npm install
+```
+
+## .env file
+Create a `.env` file in the root directory and add your Gemini API token:
+```dotenv
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+
+## Run locally
+```bash
+npm run dev
+```
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
