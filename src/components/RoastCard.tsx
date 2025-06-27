@@ -14,7 +14,7 @@ type RoastCardData = {
     attackDesc?: string;
     weakness?: string;
     bonuses?: string;
-    ressistance?: string;
+    resistance?: string;
 };
 
 type RoastCardProps = {
@@ -48,7 +48,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             attackDesc: clean(roastCard.specialMove),
             weakness: clean(roastCard.weakness),
             bonuses: githubProfile.most_used_language,
-            ressistance: clean(roastCard.ressistance),
+            resistance: clean(roastCard.resistance),
         });
         if (onLoaded) onLoaded();
     }, [onLoaded]);
@@ -129,7 +129,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                 </div>
                 <div className="flex flex-col items-center">
                     <span className="font-bold text-lg text-gray-700">Resistance</span>
-                    <span className="text-gray-600 text-base">{data.ressistance}</span>
+                    <span className="text-gray-600 text-base">{data.resistance}</span>
                 </div>
             </div>
         </div>
