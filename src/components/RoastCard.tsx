@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 type RoastCardData = {
     username: string;
+    githubUsername: string;
     followers: number;
     following: number;
     avatarUrl?: string;
@@ -35,6 +36,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
 
         setData({
             username: clean(roastCard.name) || githubProfile.login,
+            githubUsername: githubProfile.login,
             followers: githubProfile.followers,
             following: githubProfile.following,
             avatarUrl: githubProfile.avatar_url,
@@ -93,7 +95,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             {/* Username */}
             <div className="px-6 mt-4">
                 <h2 className="text-2xl font-bold text-black">{data.username}</h2>
-                <p className="text-gray-500 text-lg -mt-1">@{data.username}</p>
+                <p className="text-gray-500 text-lg -mt-1">@{data.githubUsername}</p>
             </div>
             {/* Divider */}
             <hr className="my-4 border-gray-300" />
