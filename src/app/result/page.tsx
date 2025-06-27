@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import getGithubUserProfile from "@/lib/github";
 import RoastCard from "@/components/RoastCard";
+import '../../styles/globals.css';
 
 export default function ResultPage() {
     const [username, setUsername] = useState('');
@@ -17,7 +18,6 @@ export default function ResultPage() {
             }
             setUsername(storedUsername);
 
-            // Récupérer le profil GitHub
             const githubProfile = await getGithubUserProfile();
             if (!githubProfile) {
                 setLoading(false);
@@ -25,7 +25,6 @@ export default function ResultPage() {
             }
             localStorage.setItem('githubUserProfile', JSON.stringify(githubProfile));
 
-            // Appeler l'API pour générer le roast
             const res = await fetch('/api/generate-roast', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -71,8 +70,22 @@ export default function ResultPage() {
                     <div className="w-full flex items-center justify-center relative">
                         {loading && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 bg-opacity-80 z-10">
-                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-400"></div>
-                                <span className="text-gray-400 text-base italic">Card is loading</span>
+                                <div id="wifi-loader">
+                                    <svg className="circle-outer" viewBox="0 0 86 86">
+                                        <circle className="back" cx="43" cy="43" r="40"></circle>
+                                        <circle className="front" cx="43" cy="43" r="40"></circle>
+                                        <circle className="new" cx="43" cy="43" r="40"></circle>
+                                    </svg>
+                                    <svg className="circle-middle" viewBox="0 0 60 60">
+                                        <circle className="back" cx="30" cy="30" r="27"></circle>
+                                        <circle className="front" cx="30" cy="30" r="27"></circle>
+                                    </svg>
+                                    <svg className="circle-inner" viewBox="0 0 34 34">
+                                        <circle className="back" cx="17" cy="17" r="14"></circle>
+                                        <circle className="front" cx="17" cy="17" r="14"></circle>
+                                    </svg>
+                                    <div className="text" data-text="Loading"></div>
+                                </div>
                             </div>
                         )}
                         {showCard && !loading && <RoastCard />}
