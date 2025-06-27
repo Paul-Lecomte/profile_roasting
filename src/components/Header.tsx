@@ -2,8 +2,8 @@ import React from 'react';
 
 const Header = () => {
     return (
-        <header className="w-full top-0 h-1/30 bg-gray-100 flex items-center justify-center border-t">
-            <div className="text-lg font-semibold">
+        <header className="w-full bg-white/90 border-b border-gray-100 shadow-sm py-2 flex items-center justify-center rounded-t-2xl">
+            <div className="text-lg font-semibold text-gray-800">
                 Roast Your GitHub Profile
             </div>
         </header>
