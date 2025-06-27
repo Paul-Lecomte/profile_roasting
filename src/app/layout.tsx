@@ -50,7 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html lang="en">
         <head>
-            <link rel="icon" href="/favicon.ico" sizes="any" />
+            <link rel="icon" href="/flammingoctopus.ico" sizes="any" />
         </head>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Header />

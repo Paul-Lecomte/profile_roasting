@@ -1,0 +1,94 @@
+<svg width="32" height="32" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="flameGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FF00FF"/>
+            <stop offset="50%" stop-color="#FF4500"/>
+            <stop offset="100%" stop-color="#FFFF00"/>
+        </linearGradient>
+
+        <radialGradient id="flameHighlight" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FFFFAA" stop-opacity="0.8"/>
+            <stop offset="100%" stop-color="#FF4500" stop-opacity="0"/>
+        </radialGradient>
+
+        <radialGradient id="bodyShadow" cx="50%" cy="50%" r="70%">
+            <stop offset="30%" stop-color="#1a1a1a"/>
+            <stop offset="100%" stop-color="#2c2c2c"/>
+        </radialGradient>
+
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#FFD700" flood-opacity="0.9"/>
+        </filter>
+    </defs>
+
+    <!-- Flames -->
+    <path d="
+    M32 4
+    C28 12, 20 10, 24 22
+    C20 16, 28 26, 32 18
+    C36 26, 44 16, 40 22
+    C44 10, 36 12, 32 4
+  " fill="url(#flameGrad)" opacity="0.85"/>
+
+    <path d="
+    M32 6
+    C29 13, 22 11, 26 21
+    C22 17, 28 25, 32 20
+    C35 25, 42 17, 38 21
+    C42 11, 35 13, 32 6
+  " fill="url(#flameHighlight)" opacity="0.75"/>
+
+    <!-- Cat body -->
+    <path d="
+    M32 12
+    C24 12, 18 18, 18 26
+    C18 32, 22 36, 22 38
+    C22 40, 20 44, 18 44
+    C16 44, 16 42, 14 42
+    C12 42, 12 46, 14 48
+    C16 50, 18 50, 20 50
+    C22 52, 24 56, 26 56
+    C28 56, 28 54, 28 52
+    C28 48, 30 46, 32 46
+    C34 46, 36 48, 36 52
+    C36 54, 36 56, 38 56
+    C40 56, 42 52, 44 50
+    C46 50, 48 50, 50 48
+    C52 46, 52 42, 50 42
+    C48 42, 48 44, 46 44
+    C44 44, 42 40, 42 38
+    C42 36, 46 32, 46 26
+    C46 18, 40 12, 32 12
+  " fill="url(#bodyShadow)" />
+
+    <!-- Ears flames -->
+    <path d="M16 24 L20 14 L22 24 Z" fill="url(#flameGrad)" opacity="0.9"/>
+    <path d="M48 24 L44 14 L42 24 Z" fill="url(#flameGrad)" opacity="0.9"/>
+
+    <!-- Eyes -->
+    <circle cx="26" cy="30" r="2" fill="#FFD700" filter="url(#glow)"/>
+    <circle cx="38" cy="30" r="2" fill="#FFD700" filter="url(#glow)"/>
+
+    <!-- Nose -->
+    <path d="M31 36 Q32 37 33 36 Q32 39 31 36" fill="#ff4d6d"/>
+
+    <!-- Tail -->
+    <path d="
+    M46 46
+    C52 48, 56 52, 52 56
+    C50 58, 48 56, 48 54
+    C48 52, 46 50, 44 48
+  " stroke="#2c2c2c" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <path d="
+    M50 50
+    C54 52, 53 55, 50 56
+    C51 54, 48 54, 50 50Z
+  " fill="url(#flameGrad)" opacity="0.85"/>
+
+    <path d="
+    M48 52
+    C49 53, 50 54, 49 55
+    C47 54, 48 53, 48 52Z
+  " fill="url(#flameHighlight)" opacity="0.7"/>
+</svg>
