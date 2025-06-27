@@ -121,15 +121,15 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             <div className="flex justify-between px-6 py-4">
                 <div className="flex flex-col items-center">
                     <span className="font-bold text-lg text-gray-700">Weakness</span>
-                    <span className="font-bold text-xl text-gray-800">{data.weakness}</span>
+                    <span className="text-gray-600 text-base">{data.weakness}</span>
                 </div>
                 <div className="flex flex-col items-center">
                     <span className="font-bold text-lg text-gray-700">Bonuses</span>
-                    <span className="font-bold text-xl text-gray-800">{data.bonuses}</span>
+                    <span className="text-gray-600 text-base">{data.bonuses}</span>
                 </div>
                 <div className="flex flex-col items-center">
                     <span className="font-bold text-lg text-gray-700">Resistance</span>
-                    <span className="font-bold text-xl text-gray-800">{data.ressistance}</span>
+                    <span className="text-gray-600 text-base">{data.ressistance}</span>
                 </div>
             </div>
         </div>
