@@ -55,8 +55,7 @@ github_roasting/
 │   ├── lib/                  # GitHub API calls & roast engine
 │   │   └── github.ts
 │   └── styles/               # TailwindCSS config / global CSS
-│       ├── globals.css
-│       └── tailwind.config.js
+│       └── globals.css
 ├── public/                   # Static assets (images, favicon)
 ├── .gitignore                # Ignored files
 ├── next.config.js            # Next.js config
