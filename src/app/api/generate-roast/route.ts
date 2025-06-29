@@ -4,8 +4,42 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     const profile = await req.json();
 
-    const prompt = `
-Roast this GitHub user like it's a parody trading card. Keep the roast description short.
+    const lightRoastprompt = `
+Lightly roast this GitHub user like it's a parody trading card. Keep the roast description short.
+
+GitHub Profile:
+${JSON.stringify(profile, null, 2)}
+
+Generate:
+- Name
+- Title (funny dev title)
+- Ability (A skill, 2 lines max)
+- Attack (A funny roast attack, 2 lines max)
+- Resistance (A funny resistance, 1 word)
+- Weakness (A funny weakness, 1 word)
+- Special Move
+- Roast Description, 3 lines max
+`;
+
+    const mildRoastPrompt = `
+Mildly roast this GitHub user like it's a parody trading card. Keep the roast description short.
+
+GitHub Profile:
+${JSON.stringify(profile, null, 2)}
+
+Generate:
+- Name
+- Title (funny dev title)
+- Ability (A skill, 2 lines max)
+- Attack (A funny roast attack, 2 lines max)
+- Resistance (A funny resistance, 1 word)
+- Weakness (A funny weakness, 1 word)
+- Special Move
+- Roast Description, 3 lines max
+`;
+
+    const SpicyRoastPrompt = `
+Really really roast this GitHub user like it's a parody trading card. Keep the roast description short.
 
 GitHub Profile:
 ${JSON.stringify(profile, null, 2)}
