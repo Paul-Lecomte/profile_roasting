@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import getGithubUserProfile from "@/lib/github";
 import RoastCard from "@/components/RoastCard";
-import html2canvas from "html2canvas";
+import * as htmlToImage from 'html-to-image';
 import '../../styles/globals.css';
 
 export default function ResultPage() {
@@ -54,9 +54,9 @@ export default function ResultPage() {
 
     const handleSaveRoastCard = async () => {
         if (!cardRef.current) return;
-        const canvas = await html2canvas(cardRef.current, { backgroundColor: null });
+        const dataUrl = await htmlToImage.toPng(cardRef.current);
         const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
+        link.href = dataUrl;
         link.download = 'roast_card.png';
         link.click();
     };

@@ -105,7 +105,6 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                 <div style={{
                     width: "90%",
                     height: 96,
-                    background: "url('/checker.png')",
                     backgroundSize: "cover",
                     borderTopLeftRadius: 16,
                     borderTopRightRadius: 16,
@@ -123,7 +122,6 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                         height: 96,
                         borderRadius: "50%",
                         border: "4px solid #d3d3d3",
-                        background: "url('/checker.png')",
                         backgroundSize: "cover",
                         display: "flex",
                         alignItems: "center",
