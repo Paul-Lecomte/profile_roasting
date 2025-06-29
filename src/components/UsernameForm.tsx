@@ -62,7 +62,7 @@ export default function UsernameForm() {
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="text-base font-medium text-gray-700">
-                        Roast Type
+                        Roast Level
                     </label>
                     <div className="flex justify-around items-center gap-4 py-2">
                         <label className="flex flex-col items-center cursor-pointer">
