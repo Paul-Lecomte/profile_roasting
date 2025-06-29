@@ -1,13 +1,15 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import getGithubUserProfile from "@/lib/github";
 import RoastCard from "@/components/RoastCard";
+import html2canvas from "html2canvas";
 import '../../styles/globals.css';
 
 export default function ResultPage() {
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(true);
     const [showCard, setShowCard] = useState(false);
+    const cardRef = useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         const fetchRoast = async () => {
@@ -50,6 +52,15 @@ export default function ResultPage() {
         };
     }, []);
 
+    const handleSaveRoastCard = async () => {
+        if (!cardRef.current) return;
+        const canvas = await html2canvas(cardRef.current, { backgroundColor: null });
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'roast_card.png';
+        link.click();
+    };
+
     return (
         <div className="w-screen flex items-center h-screen justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
             <div className="w-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col gap-6 border border-gray-100 mx-4">
@@ -88,7 +99,23 @@ export default function ResultPage() {
                                 </div>
                             </div>
                         )}
-                        {showCard && !loading && <RoastCard />}
+                        {showCard && !loading && (
+                            <div className="w-full flex flex-col items-center">
+                                <div ref={cardRef} className="w-full">
+                                    <RoastCard />
+                                </div>
+                                <button
+                                    onClick={handleSaveRoastCard}
+                                    className="mt-6 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 transition text-lg flex items-center gap-2"
+                                >
+                                    <svg width="20" height="20" fill="currentColor" className="inline-block" viewBox="0 0 20 20">
+                                        <path d="M13 7H7v6h6V7z" />
+                                        <path fillRule="evenodd" d="M5 3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5zm8 4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h6z" clipRule="evenodd" />
+                                    </svg>
+                                    Save Roast Card
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
