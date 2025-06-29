@@ -1,10 +1,9 @@
-// GEMINI Roast Generator API Route
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    const profile = await req.json();
+    const { profile, roastType } = await req.json();
 
-    const lightRoastprompt = `
+    const lightRoastPrompt = `
 Lightly roast this GitHub user like it's a parody trading card. Keep the roast description short.
 
 GitHub Profile:
@@ -38,7 +37,7 @@ Generate:
 - Roast Description, 3 lines max
 `;
 
-    const SpicyRoastPrompt = `
+    const spicyRoastPrompt = `
 Really really roast this GitHub user like it's a parody trading card. Keep the roast description short.
 
 GitHub Profile:
@@ -54,6 +53,10 @@ Generate:
 - Special Move
 - Roast Description, 3 lines max
 `;
+
+    let prompt = mildRoastPrompt;
+    if (roastType === "light") prompt = lightRoastPrompt;
+    if (roastType === "spicy") prompt = spicyRoastPrompt;
 
     const API_KEY = process.env.GEMINI_API_KEY;
     if (!API_KEY) {
