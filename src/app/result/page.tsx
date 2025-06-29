@@ -13,32 +13,37 @@ export default function ResultPage() {
 
     React.useEffect(() => {
         const fetchRoast = async () => {
-            const storedUsername = localStorage.getItem('username');
-            if (!storedUsername) {
+            try {
+                const storedUsername = localStorage.getItem('username');
+                if (!storedUsername) {
+                    setLoading(false);
+                    return;
+                }
+                setUsername(storedUsername);
+
+                const githubProfile = await getGithubUserProfile();
+                if (!githubProfile) {
+                    setLoading(false);
+                    return;
+                }
+                localStorage.setItem('githubUserProfile', JSON.stringify(githubProfile));
+
+                const res = await fetch('/api/generate-roast', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(githubProfile),
+                });
+
+                if (res.status === 200) {
+                    const roastCard = await res.json();
+                    localStorage.setItem('roastCard', JSON.stringify(roastCard));
+                    setShowCard(true);
+                }
                 setLoading(false);
-                return;
-            }
-            setUsername(storedUsername);
-
-            const githubProfile = await getGithubUserProfile();
-            if (!githubProfile) {
+            } catch (error) {
+                console.error('Error in fetchRoast:', error);
                 setLoading(false);
-                return;
             }
-            localStorage.setItem('githubUserProfile', JSON.stringify(githubProfile));
-
-            const res = await fetch('/api/generate-roast', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(githubProfile),
-            });
-
-            if (res.status === 200) {
-                const roastCard = await res.json();
-                localStorage.setItem('roastCard', JSON.stringify(roastCard));
-                setShowCard(true);
-            }
-            setLoading(false);
         };
 
         fetchRoast();
