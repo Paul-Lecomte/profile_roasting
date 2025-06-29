@@ -125,8 +125,8 @@ You can:
 - [x] Add user profile roasting
 - [x] Three roast modes: `light`, `mild`, and `spicy`
 - [x] Improve template variation with GPT-style prompts
+- [x] Save card as a image (PNG)
 - [ ] Add support for GitLab and Bitbucket
-- [ ] Save/share roast cards via permalink
 
 ---
 
