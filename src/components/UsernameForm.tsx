@@ -4,9 +4,14 @@ import React, { useState } from "react";
 
 export default function UsernameForm() {
     const [username, setUsername] = useState("");
+    const [roastType, setRoastType] = useState("mild");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
+    };
+
+    const handleRoastTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setRoastType(event.target.value);
     };
 
     const handleSubmit = (event: React.FormEvent) => {
@@ -15,11 +20,13 @@ export default function UsernameForm() {
             alert("Username cannot be empty");
             return;
         }
-        //clear the localStorage to avoid conflicts
+        // Clear localStorage to avoid conflicts
         localStorage.removeItem("githubUserProfile");
         localStorage.removeItem("roastCard");
         localStorage.removeItem("username");
+        localStorage.removeItem("roastType");
         localStorage.setItem("username", username);
+        localStorage.setItem("roastType", roastType);
         setUsername("");
         window.location.href = "/result";
     };
@@ -53,6 +60,21 @@ export default function UsernameForm() {
                         className="px-4 py-2 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition placeholder-gray-400 bg-gray-50 text-black"
                         placeholder="e.g. octocat"
                     />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <label htmlFor="roastType" className="text-base font-medium text-gray-700">
+                        Roast Type
+                    </label>
+                    <select
+                        id="roastType"
+                        value={roastType}
+                        onChange={handleRoastTypeChange}
+                        className="px-4 py-2 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition bg-gray-50 text-black"
+                    >
+                        <option value="light">Light</option>
+                        <option value="mild">Mild</option>
+                        <option value="spicy">Spicy</option>
+                    </select>
                 </div>
                 <button
                     type="submit"
