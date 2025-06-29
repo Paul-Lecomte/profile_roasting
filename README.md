@@ -124,8 +124,8 @@ You can:
 ## Roadmap
 
 - [x] Add user profile roasting
-- [ ] Three roast modes: `mild`, `spicy`, and `savage`
-- [ ] Improve template variation with GPT-style prompts
+- [x] Three roast modes: `light`, `mild`, and `spicy`
+- [x] Improve template variation with GPT-style prompts
 - [ ] Add support for GitLab and Bitbucket
 - [ ] Save/share roast cards via permalink
 
