@@ -10,7 +10,7 @@ export default function UsernameForm() {
         setUsername(event.target.value);
     };
 
-    const handleRoastTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleRoastTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRoastType(event.target.value);
     };
 
@@ -20,7 +20,6 @@ export default function UsernameForm() {
             alert("Username cannot be empty");
             return;
         }
-        // Clear localStorage to avoid conflicts
         localStorage.removeItem("githubUserProfile");
         localStorage.removeItem("roastCard");
         localStorage.removeItem("username");
@@ -62,19 +61,80 @@ export default function UsernameForm() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="roastType" className="text-base font-medium text-gray-700">
+                    <label className="text-base font-medium text-gray-700">
                         Roast Type
                     </label>
-                    <select
-                        id="roastType"
-                        value={roastType}
-                        onChange={handleRoastTypeChange}
-                        className="px-4 py-2 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition bg-gray-50 text-black"
-                    >
-                        <option value="light">Light</option>
-                        <option value="mild">Mild</option>
-                        <option value="spicy">Spicy</option>
-                    </select>
+                    <div className="flex justify-around items-center gap-4 py-2">
+                        <label className="flex flex-col items-center cursor-pointer">
+                            <input
+                                className="sr-only"
+                                type="radio"
+                                name="roastType"
+                                value="light"
+                                checked={roastType === "light"}
+                                onChange={handleRoastTypeChange}
+                            />
+                            <span
+                                className={`flex flex-col items-center justify-center w-25 h-20 rounded-xl border-2 transition
+                                ${roastType === "light"
+                                ? "border-blue-600 bg-blue-50 shadow-lg"
+                                : "border-gray-300 bg-white hover:border-blue-400"}
+                            `}
+                            >
+                            <span className="flex flex-row gap-0.5 text-2xl mb-2" role="img" aria-label="Light roast">
+                                <span>🔥</span>
+                            </span>
+                            <span className={`text-xs font-semibold ${roastType === "light" ? "text-blue-600" : "text-gray-500"}`}>Light</span>
+                        </span>
+                        </label>
+                        <label className="flex flex-col items-center cursor-pointer">
+                            <input
+                                className="sr-only"
+                                type="radio"
+                                name="roastType"
+                                value="mild"
+                                checked={roastType === "mild"}
+                                onChange={handleRoastTypeChange}
+                            />
+                            <span
+                                className={`flex flex-col items-center justify-center w-25 h-20 rounded-xl border-2 transition
+                                    ${roastType === "mild"
+                                    ? "border-blue-600 bg-blue-50 shadow-lg"
+                                    : "border-gray-300 bg-white hover:border-blue-400"}
+                                `}
+                            >
+                                <span className="flex flex-row gap-0.5 text-2xl mb-1" role="img" aria-label="Mild roast">
+                                    <span>🔥</span>
+                                    <span>🔥</span>
+                                </span>
+                                <span className={`text-xs font-semibold ${roastType === "mild" ? "text-blue-600" : "text-gray-500"}`}>Mild</span>
+                            </span>
+                        </label>
+                        <label className="flex flex-col items-center cursor-pointer">
+                            <input
+                                className="sr-only"
+                                type="radio"
+                                name="roastType"
+                                value="spicy"
+                                checked={roastType === "spicy"}
+                                onChange={handleRoastTypeChange}
+                            />
+                            <span
+                                className={`flex flex-col items-center justify-center w-25 h-20 rounded-xl border-2 transition
+                                    ${roastType === "spicy"
+                                    ? "border-blue-600 bg-blue-50 shadow-lg"
+                                    : "border-gray-300 bg-white hover:border-blue-400"}
+                                `}
+                            >
+                                <span className="flex flex-row gap-0.5 text-2xl mb-1" role="img" aria-label="Spicy roast">
+                                    <span>🔥</span>
+                                    <span>🔥</span>
+                                    <span>🔥</span>
+                                </span>
+                                <span className={`text-xs font-semibold ${roastType === "spicy" ? "text-blue-600" : "text-gray-500"}`}>Spicy</span>
+                            </span>
+                        </label>
+                    </div>
                 </div>
                 <button
                     type="submit"
