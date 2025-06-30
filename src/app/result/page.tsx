@@ -110,6 +110,7 @@ export default function ResultPage() {
                                 <div ref={cardRef} className="w-full">
                                     <RoastCard />
                                 </div>
+                                {/*
                                 <button
                                     onClick={handleSaveRoastCard}
                                     className="mt-6 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 transition text-lg flex items-center gap-2"
@@ -120,6 +121,7 @@ export default function ResultPage() {
                                     </svg>
                                     Save Roast Card
                                 </button>
+                                */}
                             </div>
                         )}
                     </div>
