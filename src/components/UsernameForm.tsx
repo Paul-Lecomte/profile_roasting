@@ -14,12 +14,25 @@ export default function UsernameForm() {
         setRoastType(event.target.value);
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         if (!username.trim()) {
             alert("Username cannot be empty");
             return;
         }
+
+        // Vérification de l'existence du username sur GitHub
+        try {
+            const res = await fetch(`https://api.github.com/users/${username.trim()}`);
+            if (!res.ok) {
+                alert("Ce nom d'utilisateur GitHub n'existe pas.");
+                return;
+            }
+        } catch (e) {
+            alert("Erreur lors de la vérification du nom d'utilisateur.");
+            return;
+        }
+
         localStorage.removeItem("githubUserProfile");
         localStorage.removeItem("roastCard");
         localStorage.removeItem("username");
