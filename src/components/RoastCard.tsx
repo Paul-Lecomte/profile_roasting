@@ -55,141 +55,78 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
 
     if (!data) {
         return (
-            <span style={{ color: "#9ca3af", fontStyle: "italic" }}>
-                Your roast card will appear here soon…
+            <span className="text-gray-400 italic block text-center">
+                Votre carte roast apparaîtra ici bientôt…
             </span>
         );
     }
 
     return (
-        <div
-            style={{
-                borderRadius: "1.5rem",
-                border: "4px solid #8fd3c7",
-                background: "#ece9e0",
-                width: "100%",
-                maxWidth: 500,
-                margin: "0 auto",
-                boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
-                padding: 0,
-                overflow: "hidden",
-            }}
-        >
+        <div className="rounded-3xl border-4 border-teal-300 bg-gray-100 w-full max-w-[500px] mx-auto shadow-lg p-0 overflow-hidden">
             {/* Header badges */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "1rem 1rem 0 1rem" }}>
-                <span style={{
-                    background: "#b6dde7",
-                    color: "#000",
-                    fontWeight: "bold",
-                    padding: "0.25rem 1rem",
-                    borderRadius: "9999px",
-                    fontSize: "0.875rem",
-                    boxShadow: "0 1px 2px rgba(0,0,0,0.04)"
-                }}>
+            <div className="flex justify-between items-center px-4 pt-4">
+                <span className="bg-cyan-200 text-black font-bold py-1 px-4 rounded-full text-sm shadow">
                     {data.category}
                 </span>
-                <span style={{
-                    background: "#f26a6a",
-                    color: "#000",
-                    fontWeight: "bold",
-                    padding: "0.25rem 1rem",
-                    borderRadius: "9999px",
-                    fontSize: "0.875rem",
-                    boxShadow: "0 1px 2px rgba(0,0,0,0.04)"
-                }}>
+                <span className="bg-red-300 text-black font-bold py-1 px-4 rounded-full text-sm shadow">
                     HP {data.hp}
                 </span>
             </div>
             {/* Banner + Avatar */}
-            <div style={{ position: "relative", marginTop: 8, marginBottom: 8, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <div style={{
-                    width: "90%",
-                    height: 96,
-                    backgroundSize: "cover",
-                    borderTopLeftRadius: 16,
-                    borderTopRightRadius: 16,
-                    borderBottomLeftRadius: 16,
-                    borderBottomRightRadius: 16,
-                }} />
-                <div style={{
-                    position: "absolute",
-                    top: 40,
-                    left: "50%",
-                    transform: "translateX(-50%)"
-                }}>
-                    <div style={{
-                        width: 96,
-                        height: 96,
-                        borderRadius: "50%",
-                        border: "4px solid #d3d3d3",
-                        backgroundSize: "cover",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden"
-                    }}>
+            <div className="relative mt-2 mb-2 flex flex-col items-center">
+                <div className="w-[90%] h-24 bg-cover rounded-2xl" />
+                <div className="absolute top-10 left-1/2 -translate-x-1/2">
+                    <div className="w-24 h-24 rounded-full border-4 border-gray-300 bg-cover flex items-center justify-center overflow-hidden">
                         {data.avatarUrl ? (
                             <img
                                 src={data.avatarUrl}
                                 alt="avatar"
-                                style={{
-                                    width: "100%",
-                                    height: "100%",
-                                    objectFit: "cover",
-                                    borderRadius: "50%"
-                                }}
+                                className="w-full h-full object-cover rounded-full"
                             />
                         ) : null}
                     </div>
                 </div>
             </div>
             {/* Followers / Following */}
-            <div style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "0 2rem",
-                marginTop: 32,
-                color: "#9ca3af",
-                fontSize: "1rem"
-            }}>
+            <div className="flex justify-between px-8 mt-8 text-gray-400 text-base">
                 <span>{data.followers} followers</span>
                 <span>{data.following} following</span>
             </div>
             {/* Username */}
-            <div style={{ padding: "0 1.5rem", marginTop: 16 }}>
-                <h2 style={{ fontSize: "2rem", fontWeight: "bold", color: "#000" }}>{data.username}</h2>
-                <p style={{ color: "#6b7280", fontSize: "1.125rem", marginTop: -4 }}>@{data.githubUsername}</p>
+            <div className="px-6 mt-4">
+                <h2 className="text-2xl font-bold text-black break-words">{data.username}</h2>
+                <p className="text-gray-500 text-lg mt-[-4px] break-all">@{data.githubUsername}</p>
             </div>
-            <hr style={{ margin: "1rem 0", borderColor: "#d1d5db" }} />
+            <hr className="my-4 border-gray-300" />
             {/* Ability */}
-            <div style={{ padding: "0 1.5rem" }}>
-                <h3 style={{ fontSize: "1.125rem", fontWeight: "bold", color: "#374151", marginBottom: 4 }}>
-                    Ability : <span style={{ fontWeight: "bold" }}>{data.ability}</span>
+            <div className="px-6">
+                <h3 className="text-lg font-bold text-gray-700 mb-1">
+                    Ability : <span className="font-bold">{data.ability}</span>
                 </h3>
-                <p style={{ color: "#4b5563", fontSize: "1rem", marginBottom: 16 }}>{data.abilityDesc}</p>
+                <p className="text-gray-600 text-base mb-4">{data.abilityDesc}</p>
             </div>
-            <hr style={{ margin: "0.5rem 0", borderColor: "#d1d5db" }} />
+            <hr className="my-2 border-gray-300" />
             {/* Attack */}
-            <div style={{ padding: "0 1.5rem" }}>
-                <h3 style={{ fontSize: "1.125rem", fontWeight: "bold", color: "#374151", marginBottom: 4 }}>
-                    Attack : <span style={{ fontWeight: "bold" }}>{data.attack}</span>
+            <div className="px-6">
+                <h3 className="text-lg font-bold text-gray-700 mb-1">
+                    Attack : <span className="font-bold">{data.attack}</span>
                 </h3>
-                <p style={{ color: "#4b5563", fontSize: "1rem", marginBottom: 16 }}>{data.attackDesc}</p>
+                <p className="text-gray-600 text-base mb-4">{data.attackDesc}</p>
             </div>
-            <hr style={{ margin: "0.5rem 0", borderColor: "#d1d5db" }} />
+            <hr className="my-2 border-gray-300" />
             {/* Bottom stats */}
-            <div style={{ display: "flex", justifyContent: "space-between", padding: "0 1.5rem 1rem 1.5rem" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <span style={{ fontWeight: "bold", fontSize: "1.125rem", color: "#374151" }}>Weakness</span>
-                    <span style={{ color: "#4b5563", fontSize: "1rem" }}>{data.weakness}</span>
+            <div className="flex flex-col sm:flex-row justify-between px-6 pb-4 gap-4 sm:gap-0">
+                <div className="flex flex-col items-center flex-1">
+                    <span className="font-bold text-lg text-gray-700">Weakness</span>
+                    <span className="text-gray-600 text-base">{data.weakness}</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <span style={{ fontWeight: "bold", fontSize: "1.125rem", color: "#374151" }}>Bonuses</span>
-                    <span style={{ color: "#4b5563", fontSize: "1rem" }}>{data.bonuses}</span>
+                <div className="flex flex-col items-center flex-1">
+                    <span className="font-bold text-lg text-gray-700">Bonuses</span>
+                    <span className="text-gray-600 text-base">{data.bonuses}</span>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <span style={{ fontWeight: "bold", fontSize: "1.125rem", color: "#374151" }}>Resistance</span>
-                    <span style={{ color: "#4b5563", fontSize: "1rem" }}>{data.resistance}</span>
+                <div className="flex flex-col items-center flex-1">
+                    <span className="font-bold text-lg text-gray-700">Resistance</span>
+                    <span className="text-gray-600 text-base">{data.resistance}</span>
                 </div>
             </div>
         </div>

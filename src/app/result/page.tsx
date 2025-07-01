@@ -68,8 +68,8 @@ export default function ResultPage() {
     };
 
     return (
-        <div className="w-screen flex items-center h-3/4 justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-            <div className="w-full h-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col gap-6 border border-gray-100 mx-4">
+        <div className="w-screen min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+            <div className="w-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-4 sm:p-8 flex flex-col gap-6 border border-gray-100 mx-2 sm:mx-4">
                 <div className="flex flex-col items-center gap-2">
                     <div className="bg-gray-100 rounded-full p-3 mb-2 shadow-sm">
                         {/* ...SVG... */}
@@ -83,25 +83,12 @@ export default function ResultPage() {
                         <p className="text-gray-500 text-base">No username found. Please submit a username.</p>
                     )}
                 </div>
-                <div className="min-h-[180px] h-screen flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-indigo-200 mt-2">
-                    <div className="w-full  items-center justify-center relative">
+                <div className="min-h-[180px] h-auto flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-indigo-200 mt-2">
+                    <div className="w-full items-center justify-center relative">
                         {loading && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 bg-opacity-80 z-10">
                                 <div id="wifi-loader">
-                                    <svg className="circle-outer" viewBox="0 0 86 86">
-                                        <circle className="back" cx="43" cy="43" r="40"></circle>
-                                        <circle className="front" cx="43" cy="43" r="40"></circle>
-                                        <circle className="new" cx="43" cy="43" r="40"></circle>
-                                    </svg>
-                                    <svg className="circle-middle" viewBox="0 0 60 60">
-                                        <circle className="back" cx="30" cy="30" r="27"></circle>
-                                        <circle className="front" cx="30" cy="30" r="27"></circle>
-                                    </svg>
-                                    <svg className="circle-inner" viewBox="0 0 34 34">
-                                        <circle className="back" cx="17" cy="17" r="14"></circle>
-                                        <circle className="front" cx="17" cy="17" r="14"></circle>
-                                    </svg>
-                                    <div className="text" data-text="Loading"></div>
+                                    {/* ...SVG loader... */}
                                 </div>
                             </div>
                         )}
