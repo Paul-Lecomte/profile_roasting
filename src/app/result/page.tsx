@@ -5,6 +5,18 @@ import RoastCard from "@/components/RoastCard";
 import * as htmlToImage from 'html-to-image';
 import '../../styles/globals.css';
 
+// Helpers pour base64 UTF-8 safe
+function encodePayload(obj: any) {
+    return btoa(encodeURIComponent(JSON.stringify(obj)).replace(/%([0-9A-F]{2})/g, (_, p1) =>
+        String.fromCharCode(parseInt(p1, 16))
+    ));
+}
+function decodePayload(str: string) {
+    return JSON.parse(decodeURIComponent(Array.prototype.map.call(atob(str), (c: string) =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+    ).join('')));
+}
+
 export default function ResultPage() {
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(true);
@@ -17,8 +29,7 @@ export default function ResultPage() {
 
         if (encoded) {
             try {
-                const decoded = decodeURIComponent(escape(atob(encoded)));
-                const { roastCard, githubUserProfile } = JSON.parse(decoded);
+                const { roastCard, githubUserProfile } = decodePayload(encoded);
                 localStorage.setItem("roastCard", JSON.stringify(roastCard));
                 localStorage.setItem("githubUserProfile", JSON.stringify(githubUserProfile));
                 setUsername(roastCard?.githubUsername || roastCard?.name || "Unknown");
@@ -30,7 +41,7 @@ export default function ResultPage() {
             return;
         }
 
-        // Case 2: standard generation flow
+        // Cas standard : génération normale
         const fetchRoast = async () => {
             try {
                 const storedUsername = localStorage.getItem('username');
@@ -88,12 +99,14 @@ export default function ResultPage() {
 
     const handleShareUrl = async () => {
         const roastRaw = localStorage.getItem('roastCard');
-        if (!roastRaw) {
+        const profileRaw = localStorage.getItem('githubUserProfile');
+        if (!roastRaw || !profileRaw) {
             alert("No roast card to share.");
             return;
         }
 
-        const encoded = btoa(unescape(encodeURIComponent(roastRaw)));
+        const payload = { roastCard: JSON.parse(roastRaw), githubUserProfile: JSON.parse(profileRaw) };
+        const encoded = encodePayload(payload);
         const shareUrl = `${window.location.origin}/result?data=${encoded}`;
 
         if (navigator.share) {
