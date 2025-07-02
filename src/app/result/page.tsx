@@ -12,6 +12,24 @@ export default function ResultPage() {
     const cardRef = useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const encoded = params.get('data');
+
+        if (encoded) {
+            try {
+                const decoded = decodeURIComponent(escape(atob(encoded)));
+                const roastCard = JSON.parse(decoded);
+                localStorage.setItem("roastCard", JSON.stringify(roastCard));
+                setUsername(roastCard?.githubUsername || roastCard?.name || "Unknown");
+                setShowCard(true);
+            } catch (err) {
+                console.error("Error decoding roast card:", err);
+            }
+            setLoading(false);
+            return;
+        }
+
+        // Case 2: standard generation flow
         const fetchRoast = async () => {
             try {
                 const storedUsername = localStorage.getItem('username');
@@ -67,6 +85,36 @@ export default function ResultPage() {
         link.click();
     };
 
+    const handleShareUrl = async () => {
+        const roastRaw = localStorage.getItem('roastCard');
+        if (!roastRaw) {
+            alert("No roast card to share.");
+            return;
+        }
+
+        const encoded = btoa(unescape(encodeURIComponent(roastRaw)));
+        const shareUrl = `${window.location.origin}/result?data=${encoded}`;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: "Ma Roast Card GitHub",
+                    text: "Check ma carte roast GitHub !",
+                    url: shareUrl,
+                });
+            } catch (err) {
+                alert("Erreur lors du partage.");
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(shareUrl);
+                alert("Lien copié dans le presse-papiers !");
+            } catch {
+                alert("Impossible de copier le lien.");
+            }
+        }
+    };
+
     return (
         <div className="w-screen min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
             <div className="w-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-4 sm:p-8 flex flex-col gap-6 border border-gray-100 mx-2 sm:mx-4">
@@ -88,22 +136,7 @@ export default function ResultPage() {
                         {loading && (
                             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-50 bg-opacity-80 z-10">
                                 <div id="wifi-loader">
-                                    <svg className="circle-outer" viewBox="0 0 86 86">
-                                        Add comment
-                                        More actions
-                                        <circle className="back" cx="43" cy="43" r="40"></circle>
-                                        <circle className="front" cx="43" cy="43" r="40"></circle>
-                                        <circle className="new" cx="43" cy="43" r="40"></circle>
-                                    </svg>
-                                    <svg className="circle-middle" viewBox="0 0 60 60">
-                                        <circle className="back" cx="30" cy="30" r="27"></circle>
-                                        <circle className="front" cx="30" cy="30" r="27"></circle>
-                                    </svg>
-                                    <svg className="circle-inner" viewBox="0 0 34 34">
-                                        <circle className="back" cx="17" cy="17" r="14"></circle>
-                                        <circle className="front" cx="17" cy="17" r="14"></circle>
-                                    </svg>
-                                    <div className="text" data-text="Loading"></div>
+                                    {/* loader SVGs here */}
                                 </div>
                             </div>
                         )}
@@ -116,11 +149,13 @@ export default function ResultPage() {
                                     onClick={handleSaveRoastCard}
                                     className="mt-6 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-semibold py-2 px-6 rounded-lg shadow hover:from-indigo-600 hover:to-blue-600 transition text-lg flex items-center gap-2"
                                 >
-                                    <svg width="20" height="20" fill="currentColor" className="inline-block" viewBox="0 0 20 20">
-                                        <path d="M13 7H7v6h6V7z" />
-                                        <path fillRule="evenodd" d="M5 3a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5zm8 4a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h6z" clipRule="evenodd" />
-                                    </svg>
                                     Save Roast Card
+                                </button>
+                                <button
+                                    onClick={handleShareUrl}
+                                    className="mt-3 bg-gradient-to-r from-teal-500 to-green-500 text-white font-semibold py-2 px-6 rounded-lg shadow hover:from-teal-600 hover:to-green-600 transition text-lg flex items-center gap-2"
+                                >
+                                    Partager le lien
                                 </button>
                             </div>
                         )}
