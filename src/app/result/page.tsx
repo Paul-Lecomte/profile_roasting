@@ -18,8 +18,9 @@ export default function ResultPage() {
         if (encoded) {
             try {
                 const decoded = decodeURIComponent(escape(atob(encoded)));
-                const roastCard = JSON.parse(decoded);
+                const { roastCard, githubUserProfile } = JSON.parse(decoded);
                 localStorage.setItem("roastCard", JSON.stringify(roastCard));
+                localStorage.setItem("githubUserProfile", JSON.stringify(githubUserProfile));
                 setUsername(roastCard?.githubUsername || roastCard?.name || "Unknown");
                 setShowCard(true);
             } catch (err) {
