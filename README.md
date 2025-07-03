@@ -1,4 +1,7 @@
 <!-- PROJECT TITLE & BADGES -->
+<p align="center">
+  <img src="public/flammingoctopus.svg" alt="Logo" width="120" />
+</p>
 <h1 align="center">github_roasting</h1>
 <p align="center">
   <strong> Roasting GitHub repos for fun and laughter</strong><br>
@@ -15,6 +18,9 @@
 
 ##  What is github_roasting?
 **github_roasting** is a fun little tool that analyzes a GitHub profile or repository and returns a witty roast. It’s a side project built with love in TypeScript, leveraging the GitHub API to generate light-hearted commentary based on your public data.
+<p align="center">
+  <img src="public/example-roast-card.png" alt="Example Roast Card" width="400" />
+</p>
 
 ---
 
@@ -34,7 +40,6 @@
 -  **Styling**: TailwindCSS
 -  **Data**: GitHub REST API
 -  **AI used**: Gemini-2.0-flash API - with custom prompts
--  **Logic**: Roast engine based on heuristics and templates
 
 ---
 
@@ -106,16 +111,16 @@ Enter a GitHub username and click **“Roast Me”**.
 The app fetches public repo data and uses roast templates to generate a humorous output.
 
 Roast levels:
-- `mild`: Friendly teasing
-- `spicy`: A little sting
-- `savage`: Brutally honest (but still funny)
+- `light`: Friendly teasing
+- `mild`: A little sting
+- `spicy`: Brutally honest (but still funny)
 
 ---
 
 ## Customization
 
 You can:
-- Modify templates in `/app/api/roast/templates.ts`
+- Modify templates in `/app/api/generate-roast/route.ts`
 - Add new UI features or API endpoints
 
 ---
