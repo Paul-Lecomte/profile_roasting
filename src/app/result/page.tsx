@@ -22,6 +22,7 @@ export default function ResultPage() {
     const [loading, setLoading] = useState(true);
     const [showCard, setShowCard] = useState(false);
     const cardRef = useRef<HTMLDivElement>(null);
+    const [error, setError] = useState<string | null>(null);
 
     React.useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -64,6 +65,12 @@ export default function ResultPage() {
                     body: JSON.stringify(githubProfile),
                 });
 
+                if (res.status === 429) {
+                    setError("Too many requests. Please try again in 1 minute.");
+                    setLoading(false);
+                    return;
+                }
+
                 if (res.status === 200) {
                     const roastCard = await res.json();
                     localStorage.setItem('roastCard', JSON.stringify(roastCard));
@@ -71,7 +78,7 @@ export default function ResultPage() {
                 }
                 setLoading(false);
             } catch (error) {
-                console.error('Error in fetchRoast:', error);
+                setError("Error while generating the roast card.");
                 setLoading(false);
             }
         };
@@ -112,19 +119,19 @@ export default function ResultPage() {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: "Ma Roast Card GitHub",
-                    text: "Check ma carte roast GitHub !",
+                    title: "My GitHub Roast Card",
+                    text: "Check My Github Roast Card !",
                     url: shareUrl,
                 });
             } catch (err) {
-                alert("Erreur lors du partage.");
+                alert("An error occured.");
             }
         } else {
             try {
                 await navigator.clipboard.writeText(shareUrl);
-                alert("Lien copié dans le presse-papiers !");
+                alert("Link copied !");
             } catch {
-                alert("Impossible de copier le lien.");
+                alert("Impossible to copy the link.");
             }
         }
     };
@@ -165,6 +172,11 @@ export default function ResultPage() {
                                     </svg>
                                     <div className="text" data-text="Loading"></div>
                                 </div>
+                            </div>
+                        )}
+                        {error && (
+                            <div className="text-red-600 text-center font-semibold mb-4">
+                                {error}
                             </div>
                         )}
                         {showCard && !loading && (

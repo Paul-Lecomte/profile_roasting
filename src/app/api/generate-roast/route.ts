@@ -1,6 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// --- Début Rate Limiter ---
+const rateLimitMap = new Map<string, { count: number, last: number }>();
+const RATE_LIMIT = 25; // max requêtes
+const WINDOW = 60 * 1000; // 1 minute
+
+function isRateLimited(ip: string) {
+    const now = Date.now();
+    const entry = rateLimitMap.get(ip) || { count: 0, last: now };
+    if (now - entry.last > WINDOW) {
+        rateLimitMap.set(ip, { count: 1, last: now });
+        return false;
+    }
+    if (entry.count >= RATE_LIMIT) return true;
+    rateLimitMap.set(ip, { count: entry.count + 1, last: entry.last });
+    return false;
+}
+// --- Fin Rate Limiter ---
+
 export async function POST(req: NextRequest) {
+    // Récupération IP (fallback "unknown")
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    if (isRateLimited(ip)) {
+        return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+    }
+
     const { profile, roastType } = await req.json();
 
     const lightRoastPrompt = `
