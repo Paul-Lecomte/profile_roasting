@@ -119,8 +119,6 @@ export default function ResultPage() {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: "My GitHub Roast Card",
-                    text: "Check My Github Roast Card !",
                     url: shareUrl,
                 });
             } catch (err) {
