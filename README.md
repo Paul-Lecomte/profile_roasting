@@ -149,5 +149,7 @@ Huge shout-out to:
 
 ## License
 
-MIT © Paul Lecomte  
-See [LICENSE](./LICENSE) for full details.
+This project is licensed under the terms of the GNU General Public License v3.0.  
+Copyright (c) 2025 Paul Lecomte.
+
+See the [LICENSE](./LICENSE) file for details..
