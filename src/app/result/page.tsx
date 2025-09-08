@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef } from 'react';
 import getGithubUserProfile from "@/lib/github";
+import getTwitterUserProfile from "@/lib/twitter";
 import RoastCard from "@/components/RoastCard";
 import * as htmlToImage from 'html-to-image';
 import '../../styles/globals.css';
@@ -46,23 +47,28 @@ export default function ResultPage() {
         const fetchRoast = async () => {
             try {
                 const storedUsername = localStorage.getItem('username');
+                const platform = localStorage.getItem('platform') || 'github';
+                const roastType = localStorage.getItem('roastType') || 'mild';
                 if (!storedUsername) {
                     setLoading(false);
                     return;
                 }
                 setUsername(storedUsername);
 
-                const githubProfile = await getGithubUserProfile();
-                if (!githubProfile) {
+                const profile = platform === 'twitter'
+                    ? await getTwitterUserProfile()
+                    : await getGithubUserProfile();
+
+                if (!profile) {
                     setLoading(false);
                     return;
                 }
-                localStorage.setItem('githubUserProfile', JSON.stringify(githubProfile));
+                localStorage.setItem('githubUserProfile', JSON.stringify(profile));
 
                 const res = await fetch('/api/generate-roast', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(githubProfile),
+                    body: JSON.stringify({ profile, roastType, source: platform, twitterExtended: localStorage.getItem('twitterExtended') ? JSON.parse(localStorage.getItem('twitterExtended')!) : null }),
                 });
 
                 if (res.status === 429) {
@@ -91,6 +97,7 @@ export default function ResultPage() {
             localStorage.removeItem('githubUserProfile');
             localStorage.removeItem('roastCard');
             localStorage.removeItem('username');
+            localStorage.removeItem('twitterExtended');
         };
     }, []);
 
@@ -141,7 +148,7 @@ export default function ResultPage() {
                     <div className="bg-gray-100 rounded-full p-3 mb-2 shadow-sm">
                         {/* ...SVG... */}
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-800 text-center">Your GitHub Roast Card</h2>
+                    <h2 className="text-2xl font-bold text-gray-800 text-center">Your GitHub or X Roast Card</h2>
                 </div>
                 <div className="flex flex-col items-center gap-2">
                     {username ? (
