@@ -145,8 +145,8 @@ export default function ResultPage() {
         <div className="w-screen min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
             <div className="w-full max-w-2xl bg-white/90 rounded-2xl shadow-xl p-4 sm:p-8 flex flex-col gap-6 border border-gray-100 mx-2 sm:mx-4">
                 <div className="flex flex-col items-center gap-2">
-                    <div className="bg-gray-100 rounded-full p-3 mb-2 shadow-sm">
-                        {/* ...SVG... */}
+                    <div className="bg-gray-100 rounded-full p-1 mb-2 shadow-sm">
+                        <img src="/flammingoctopus.svg" alt="Flamming Octopus" width={48} height={48} />
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800 text-center">Your GitHub or X Roast Card</h2>
                 </div>
