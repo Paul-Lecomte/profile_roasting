@@ -25,7 +25,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
     }
 
-    const { profile, roastType } = await req.json();
+    const body = await req.json();
+    const profile = body?.profile ?? body;
+    const roastType = body?.roastType ?? 'mild';
+    const source = body?.source ?? 'github';
+    const twitterExtended = body?.twitterExtended ?? null;
 
     const promptAddendum = `
 Ensure **every field** is filled with original, creative, and meaningful content.
@@ -36,17 +40,20 @@ Format your output exactly as a list with clear field names followed by a colon 
 For the Roast Description, write exactly 3 witty lines.
 `;
 
+    const contextLabel = source === 'twitter' ? 'Twitter (X) Profile' : 'GitHub Profile';
+
     const lightRoastPrompt = `
-Create a light-hearted, playful parody trading card for this GitHub user.
+Create a light-hearted, playful parody trading card for this ${source === 'twitter' ? 'Twitter (X) user' : 'GitHub user'}.
 Keep the tone friendly and cheeky, like teasing a buddy who’s harmlessly obsessed with dark mode or quirky habits.
 
-GitHub Profile:
+${contextLabel}:
 ${JSON.stringify(profile, null, 2)}
+${source === 'twitter' && twitterExtended ? `\nRecent Twitter Activity Snapshot (use this heavily for the roast):\n${JSON.stringify(twitterExtended, null, 2)}\n` : ''}
 
 Provide these parody card fields with clear, fun, and original content:
 - Name: A clever or ironic nickname
-- Title: A humorous and positive dev role (e.g., "Bug Whisperer")
-- Ability: A charming or amusing coding skill or trait (max 2 lines)
+- Title: A humorous and positive role (e.g., "Bug Whisperer" or "Reply Guy Wrangler")
+- Ability: A charming or amusing skill or trait (max 2 lines)
 - Attack: A gentle roast move — playful, not harsh (max 2 lines)
 - Resistance: One word representing what they handle effortlessly
 - Weakness: One word revealing a funny vulnerability
@@ -57,16 +64,17 @@ ${promptAddendum}
 `;
 
     const mildRoastPrompt = `
-Create a mildly snarky parody trading card for this GitHub user.
+Create a mildly snarky parody trading card for this ${source === 'twitter' ? 'Twitter (X) user' : 'GitHub user'}.
 Keep the tone playful but a bit sharper — like teasing a teammate who insists "it works on my machine."
 
-GitHub Profile:
+${contextLabel}:
 ${JSON.stringify(profile, null, 2)}
+${source === 'twitter' && twitterExtended ? `\nRecent Twitter Activity Snapshot (use this heavily for the roast):\n${JSON.stringify(twitterExtended, null, 2)}\n` : ''}
 
 Provide these parody card fields with clever, original content:
-- Name: A cheeky or ironic dev nickname
-- Title: A humorous developer title (e.g., "Merge Conflict Master")
-- Ability: An exaggerated or quirky skill or habit (max 2 lines)
+- Name: A cheeky or ironic nickname
+- Title: A humorous title (e.g., "Merge Conflict Master" or "Hot Takes Engineer")
+- Ability: An exaggerated or quirky habit (max 2 lines)
 - Attack: A witty roast move (max 2 lines)
 - Resistance: One word describing what they seem immune to
 - Weakness: One word pointing out their Achilles’ heel
@@ -77,16 +85,17 @@ ${promptAddendum}
 `;
 
     const spicyRoastPrompt = `
-Create a brutally funny parody trading card for this GitHub user.
-Go all out with savage, clever, and hilarious roasts — like a ruthless code review.
+Create a brutally funny parody trading card for this ${source === 'twitter' ? 'Twitter (X) user' : 'GitHub user'}.
+Go all out with savage, clever, and hilarious roasts — like a ruthless code review or a ratio in the comments.
 
-GitHub Profile:
+${contextLabel}:
 ${JSON.stringify(profile, null, 2)}
+${source === 'twitter' && twitterExtended ? `\nRecent Twitter Activity Snapshot (use this heavily for the roast):\n${JSON.stringify(twitterExtended, null, 2)}\n` : ''}
 
 Provide these parody card fields with bold, original humor:
-- Name: A savage or brutally funny dev nickname
-- Title: A cutting developer title (e.g., "Senior Stack Overflow Copy-Paster")
-- Ability: An embarrassing or ridiculous dev trait (max 2 lines)
+- Name: A savage or brutally funny nickname
+- Title: A cutting title (e.g., "Senior Stack Overflow Copy-Paster" or "Certified Ratio Magnet")
+- Ability: An embarrassing or ridiculous trait (max 2 lines)
 - Attack: A devastating roast attack move (max 2 lines)
 - Resistance: One word describing something they bizarrely survive
 - Weakness: One word describing their ultimate weakness
@@ -153,7 +162,7 @@ ${promptAddendum}
         resistance: cleanField(text.match(/Resistance:\s*(.*)/)?.[1]),
         weakness: cleanField(text.match(/Weakness:\s*(.*)/)?.[1]),
         specialMove: cleanField(text.match(/Special Move:\s*(.*)/)?.[1]),
-        description: cleanField(text.match(/Desc(?:ription)?:\s*([\s\S]*)/)?.[1]),
+        description: cleanField(text.match(/(?:Roast\s+)?Desc(?:ription)?:\s*([\s\S]*)/)?.[1]),
     };
 
     return NextResponse.json(roastCard);
