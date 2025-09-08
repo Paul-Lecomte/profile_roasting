@@ -6,14 +6,14 @@ import { Analytics } from "@vercel/analytics/next"
 
 
 export const metadata = {
-  title: "GitHub Roast Card",
+  title: "GitHub/X Roast Card",
     icons: {
         icon: "/flammingoctopus.ico",
     },
-  description: "Generate a funny roast card for your GitHub profile",
+  description: "Generate a funny roast card for your GitHub or X profile",
   keywords: [
     "GitHub",
-    "Roast Card",
+    "Roast Card", "Twitter", "X",
     "Parody Trading Card",
     "Funny GitHub Profile",
     "Developer Humor",
