@@ -76,11 +76,11 @@ export default function UsernameForm() {
                     <div className="flex gap-3">
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input type="radio" name="platform" value="github" checked={platform === 'github'} onChange={() => setPlatform('github')} />
-                            <span>GitHub</span>
+                            <span className="text-gray-500">GitHub</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input type="radio" name="platform" value="twitter" checked={platform === 'twitter'} onChange={() => setPlatform('twitter')} />
-                            <span>X (Twitter)</span>
+                            <span className="text-gray-500">X (Twitter)</span>
                         </label>
                     </div>
                 </div>
