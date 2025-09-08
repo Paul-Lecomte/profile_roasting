@@ -60,16 +60,6 @@ export default async function getGithubUserProfile() {
     };
 
     localStorage.setItem('githubUserProfile', JSON.stringify(profile));
-
-    // Appel à la route API pour générer la carte
-    const roastRes = await fetch('/api/generate-roast', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profile)
-    });
-    if (!roastRes.ok) throw new Error('Error generating roast card');
-    const roastCard = await roastRes.json();
-    localStorage.setItem('roastCard', JSON.stringify(roastCard));
-
+    // The API call to generate the roast card is handled in the result page
     return profile;
 }
