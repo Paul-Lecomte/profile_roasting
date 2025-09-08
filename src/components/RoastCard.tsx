@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 
 type RoastCardData = {
     username: string;
-    githubUsername: string;
+    handle: string;
     followers: number;
     following: number;
     avatarUrl?: string;
+    bannerUrl?: string | null;
     category?: string;
     hp?: number;
     ability?: string;
@@ -15,6 +16,7 @@ type RoastCardData = {
     weakness?: string;
     bonuses?: string;
     resistance?: string;
+    platform?: 'github' | 'twitter';
 };
 
 type RoastCardProps = {
@@ -31,24 +33,29 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
         const roastCardRaw = localStorage.getItem("roastCard");
         if (!githubProfileRaw || !roastCardRaw) return;
 
-        const githubProfile = JSON.parse(githubProfileRaw);
+        const profile = JSON.parse(githubProfileRaw);
         const roastCard = JSON.parse(roastCardRaw);
+        const platform = (localStorage.getItem('platform') as 'github' | 'twitter') || 'github';
+        const twitterExtendedRaw = localStorage.getItem('twitterExtended');
+        const twitterExtended = twitterExtendedRaw ? JSON.parse(twitterExtendedRaw) : null;
 
         setData({
-            username: clean(roastCard.name) || githubProfile.login,
-            githubUsername: githubProfile.login,
-            followers: githubProfile.followers,
-            following: githubProfile.following,
-            avatarUrl: githubProfile.avatar_url,
+            username: clean(roastCard.name) || profile.login,
+            handle: profile.login,
+            followers: profile.followers,
+            following: profile.following,
+            avatarUrl: profile.avatar_url,
+            bannerUrl: twitterExtended?.bannerUrl ?? null,
             category: clean(roastCard.title),
-            hp: githubProfile.followers * 2 + githubProfile.following,
+            hp: profile.followers * 2 + profile.following,
             ability: clean(roastCard.ability),
             abilityDesc: clean(roastCard.description),
             attack: clean(roastCard.attack),
             attackDesc: clean(roastCard.specialMove),
             weakness: clean(roastCard.weakness),
-            bonuses: githubProfile.most_used_language,
+            bonuses: profile.most_used_language,
             resistance: clean(roastCard.resistance),
+            platform,
         });
         if (onLoaded) onLoaded();
     }, [onLoaded]);
@@ -77,7 +84,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                 </div>
                 {/* Banner + Avatar */}
                 <div className="relative mt-2 mb-2 flex flex-col items-center">
-                    <div className="w-[90%] h-16 sm:h-24 bg-cover rounded-2xl" />
+                    <div className="w-[90%] h-16 sm:h-24 bg-cover rounded-2xl" style={data.bannerUrl ? { backgroundImage: `url(${data.bannerUrl})`, backgroundPosition: 'center' } : undefined} />
                     <div className="absolute top-6 sm:top-10 left-1/2 -translate-x-1/2">
                         <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full border-4 border-gray-300 bg-cover flex items-center justify-center overflow-hidden">
                             {data.avatarUrl ? (
@@ -98,7 +105,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                 {/* Username */}
                 <div className="px-3 sm:px-6 mt-4">
                     <h2 className="text-lg sm:text-2xl font-bold text-black break-words">{data.username}</h2>
-                    <p className="text-gray-500 text-sm sm:text-lg mt-[-4px] break-all">@{data.githubUsername}</p>
+                    <p className="text-gray-500 text-sm sm:text-lg mt-[-4px] break-all">@{data.handle}</p>
                 </div>
                 <hr className="my-2 sm:my-4 border-gray-300" />
                 {/* Ability */}
