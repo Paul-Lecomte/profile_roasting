@@ -45,11 +45,8 @@ function normalizeCount(raw: string): number {
 }
 
 function extractCountsFromText(txt: string) {
-  // Handle both English and French labels
-  // Examples: "1,234 Followers", "5.6K abonnés", "789 Following", "1.2M abonnements"
-  // Regex looks for a number followed by optional space and the label
-  const followersMatch = txt.match(/([0-9][0-9\s,.kKmM]*)\s*(abonnés|followers)/i);
-  const followingMatch = txt.match(/([0-9][0-9\s,.kKmM]*)\s*(abonnements|following)/i);
+  const followersMatch = txt.match(/([0-9][0-9\s,.kKmM]*)\s*(Followers|Abonnés|Seguidor(?:es)?|Seguidores|フォロワー|팔로워|粉丝|Follower|Anhänger|Seguaci|Seguidores)/i);
+  const followingMatch = txt.match(/([0-9][0-9\s,.kKmM]*)\s*(Following|Abonnements|Siguiendo|Seguindo|フォロー中|팔로잉|关注|Gefolgt|In Seguito)/i);
 
   const followers = followersMatch ? normalizeCount(followersMatch[1].replace(/\s|&nbsp;/g, "")) : 0;
   const following = followingMatch ? normalizeCount(followingMatch[1].replace(/\s|&nbsp;/g, "")) : 0;
@@ -57,12 +54,10 @@ function extractCountsFromText(txt: string) {
 }
 
 function extractImageUrls(txt: string) {
-  // Avatar
   const avatarMatch = txt.match(/https?:\/\/pbs\.twimg\.com\/profile_images\/[^\s)"']+/i);
-
-  // Banner (search exact profile_banners URL format)
   const bannerMatch = txt.match(/https?:\/\/pbs\.twimg\.com\/profile_banners\/\d+\/\d+\/\d+x\d+/i);
 
+  if (!bannerMatch) console.log("No banner found. First 1000 chars:", txt.slice(0, 1000));
   return {
     avatarUrl: avatarMatch?.[0] || null,
     bannerUrl: bannerMatch?.[0] || null,
