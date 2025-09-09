@@ -57,9 +57,12 @@ function extractCountsFromText(txt: string) {
 }
 
 function extractImageUrls(txt: string) {
-  // Common CDN patterns
+  // Avatar
   const avatarMatch = txt.match(/https?:\/\/pbs\.twimg\.com\/profile_images\/[^\s)"']+/i);
-  const bannerMatch = txt.match(/https?:\/\/pbs\.twimg\.com\/profile_banners\/[^\s)"']+/i);
+
+  // Banner (search exact profile_banners URL format)
+  const bannerMatch = txt.match(/https?:\/\/pbs\.twimg\.com\/profile_banners\/\d+\/\d+\/\d+x\d+/i);
+
   return {
     avatarUrl: avatarMatch?.[0] || null,
     bannerUrl: bannerMatch?.[0] || null,
