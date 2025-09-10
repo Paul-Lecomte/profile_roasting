@@ -70,7 +70,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
 
     return (
         <div
-            className="roast-card-responsive rounded-3xl border-4 border-teal-300 bg-gray-100 mx-auto shadow-lg p-0 overflow-hidden"
+            className="roast-card-responsive rounded-3xl border-4 border-teal-300 bg-gray-100 mx-auto shadow-lg p-0"
         >
             <div className="flex flex-col h-full">
                 {/* Header badges */}
@@ -143,15 +143,15 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             <style jsx global>{`
                 .roast-card-responsive {
                     width: 98vw;
-                    max-width: 370px;
+                    max-width: 380px;
                     height: auto;
-                    max-height: 90vh;
+                    max-height: 120rem;
                 }
                 @media (min-width: 640px) {
                     .roast-card-responsive {
                         width: 100%;
                         max-width: 500px;
-                        max-height: 90vh;
+                        max-height: 120rem;
                     }
                 }
             `}</style>
