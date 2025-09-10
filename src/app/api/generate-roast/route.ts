@@ -32,15 +32,17 @@ export async function POST(req: NextRequest) {
     const twitterExtended = body?.twitterExtended ?? null;
 
     const promptAddendum = `
-Ensure **every field** is filled with original, creative, and meaningful content.
+Ensure every field is filled with original, creative, and meaningful content.
 Avoid placeholders, empty responses, or repeated filler like just "**".
 Use natural, casual language with humor fitting the roast style.
 Each item should be concise yet expressive.
 Format your output exactly as a list with clear field names followed by a colon and the value.
 For the Roast Description, write exactly 3 witty lines.
+Always include these fields exactly with these labels: Name, Title, Ability, Attack, Resistance, Weakness, Bonuses, Special Move, Roast Description.
 `;
 
     const contextLabel = source === 'twitter' ? 'Twitter (X) Profile' : 'GitHub Profile';
+    const twitterFlavor = source === 'twitter' ? `\nGuidance (Twitter flavor):\n- Focus on timeline vibes: memes, threads, hot takes, ratios, reply-guy energy, blue-check flexing, hashtag spam, crypto/NFT/AI buzz, and follower clout.\n- Avoid programming or code jokes unless clearly present in the provided snapshot.\n- Keep references native to Twitter: quote-tweets, dunks, screenshots of notes app apologies, "this you?", and ratio lore.\n` : '';
 
     const lightRoastPrompt = `
 Create a light-hearted, playful parody trading card for this ${source === 'twitter' ? 'Twitter (X) user' : 'GitHub user'}.
@@ -49,7 +51,7 @@ Keep the tone friendly and cheeky, like teasing a buddy who’s harmlessly obses
 ${contextLabel}:
 ${JSON.stringify(profile, null, 2)}
 ${source === 'twitter' && twitterExtended ? `\nRecent Twitter Activity Snapshot (use this heavily for the roast):\n${JSON.stringify(twitterExtended, null, 2)}\n` : ''}
-
+${twitterFlavor}
 Provide these parody card fields with clear, fun, and original content:
 - Name: A clever or ironic nickname
 - Title: A humorous and positive role (e.g., "Bug Whisperer" or "Reply Guy Wrangler")
@@ -57,6 +59,7 @@ Provide these parody card fields with clear, fun, and original content:
 - Attack: A gentle roast move — playful, not harsh (max 2 lines)
 - Resistance: One word representing what they handle effortlessly
 - Weakness: One word revealing a funny vulnerability
+- Bonuses: Two short perks or redeeming qualities (comma-separated)
 - Special Move: A creative, amusing power move or signature trick
 - Roast Description: Exactly 3 witty, kind, and lighthearted lines teasing them
 
@@ -70,7 +73,7 @@ Keep the tone playful but a bit sharper — like teasing a teammate who insists 
 ${contextLabel}:
 ${JSON.stringify(profile, null, 2)}
 ${source === 'twitter' && twitterExtended ? `\nRecent Twitter Activity Snapshot (use this heavily for the roast):\n${JSON.stringify(twitterExtended, null, 2)}\n` : ''}
-
+${twitterFlavor}
 Provide these parody card fields with clever, original content:
 - Name: A cheeky or ironic nickname
 - Title: A humorous title (e.g., "Merge Conflict Master" or "Hot Takes Engineer")
@@ -78,6 +81,7 @@ Provide these parody card fields with clever, original content:
 - Attack: A witty roast move (max 2 lines)
 - Resistance: One word describing what they seem immune to
 - Weakness: One word pointing out their Achilles’ heel
+- Bonuses: Two short perks or redeeming qualities (comma-separated)
 - Special Move: A quirky or exaggerated superpower
 - Roast Description: Exactly 3 lines of clever, fun roast — teasing but not cruel
 
@@ -91,14 +95,15 @@ Go all out with savage, clever, and hilarious roasts — like a ruthless code re
 ${contextLabel}:
 ${JSON.stringify(profile, null, 2)}
 ${source === 'twitter' && twitterExtended ? `\nRecent Twitter Activity Snapshot (use this heavily for the roast):\n${JSON.stringify(twitterExtended, null, 2)}\n` : ''}
-
+${twitterFlavor}
 Provide these parody card fields with bold, original humor:
 - Name: A savage or brutally funny nickname
-- Title: A cutting title (e.g., "Senior Stack Overflow Copy-Paster" or "Certified Ratio Magnet")
+- Title: A cutting title (e.g., "Certified Ratio Magnet" or "Thread Unraveler")
 - Ability: An embarrassing or ridiculous trait (max 2 lines)
 - Attack: A devastating roast attack move (max 2 lines)
 - Resistance: One word describing something they bizarrely survive
 - Weakness: One word describing their ultimate weakness
+- Bonuses: Two short perks or redeeming qualities (comma-separated)
 - Special Move: An over-the-top, meme-worthy ultimate ability
 - Roast Description: Exactly 3 sharp, absurd, and meme-worthy lines of roast
 
@@ -155,15 +160,16 @@ ${promptAddendum}
     }
 
     const roastCard = {
-        name: cleanField(text.match(/Name:\s*(.*)/)?.[1]),
-        title: cleanField(text.match(/Title:\s*(.*)/)?.[1]),
-        ability: cleanField(text.match(/Ability:\s*(.*)/)?.[1]),
-        attack: cleanField(text.match(/Attack:\s*(.*)/)?.[1]),
-        resistance: cleanField(text.match(/Resistance:\s*(.*)/)?.[1]),
-        weakness: cleanField(text.match(/Weakness:\s*(.*)/)?.[1]),
-        specialMove: cleanField(text.match(/Special Move:\s*(.*)/)?.[1]),
-        description: cleanField(text.match(/(?:Roast\s+)?Desc(?:ription)?:\s*([\s\S]*)/)?.[1]),
-    };
+        name: cleanField(text.match(/Name:\s*(.*)/i)?.[1]),
+        title: cleanField(text.match(/Title:\s*(.*)/i)?.[1]),
+        ability: cleanField(text.match(/Ability:\s*(.*)/i)?.[1]),
+        attack: cleanField(text.match(/Attack:\s*(.*)/i)?.[1]),
+        resistance: cleanField(text.match(/Resistance:\s*(.*)/i)?.[1]),
+        weakness: cleanField(text.match(/Weakness:\s*(.*)/i)?.[1]),
+        bonuses: cleanField(text.match(/Bonuses?:\s*([\s\S]*?)(?:\n|$)/i)?.[1]),
+        specialMove: cleanField(text.match(/Special\s*Move:\s*(.*)/i)?.[1]),
+        description: cleanField(text.match(/(?:Roast\s+)?Desc(?:ription)?:\s*([\s\S]*)/i)?.[1]),
+    } as const;
 
     return NextResponse.json(roastCard);
 }
