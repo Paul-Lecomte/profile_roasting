@@ -48,6 +48,7 @@ export default function UsernameForm() {
         localStorage.removeItem("username");
         localStorage.removeItem("roastType");
         localStorage.removeItem("platform");
+        localStorage.removeItem("twitterExtended");
         localStorage.setItem("username", username);
         localStorage.setItem("roastType", roastType);
         localStorage.setItem("platform", platform);
