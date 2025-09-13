@@ -131,8 +131,9 @@ You can:
 - [x] Three roast modes: `light`, `mild`, and `spicy`
 - [x] Improve template variation with GPT-style prompts
 - [x] Save card as a image (PNG)
+- [x] Add Twitter (X) roasting
+- [x] Deploy on Vercel
 - [ ] Add other options like nice card or funny card
-- [ ] Add support for GitLab and Bitbucket
 
 ---
 

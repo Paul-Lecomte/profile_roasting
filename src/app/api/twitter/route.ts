@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-
-// Custom Twitter (X) scraper without Nitter or official API
-// Strategy:
-// 1) Try fetching mobile pages directly with realistic headers (may return app shell).
-// 2) Fallback to r.jina.ai proxy which returns readable text for JS-heavy pages.
-// 3) Parse counts, avatar, banner, and extract recent posts and replies.
-//    We fetch two views: profile timeline and with_replies timeline to separate posts/comments.
+import puppeteer from "puppeteer";
 
 const UA =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
 
-async function fetchText(url: string) {
+async function fetchHtml(url: string): Promise<string> {
   const res = await fetch(url, {
     headers: {
       "User-Agent": UA,
@@ -20,12 +14,11 @@ async function fetchText(url: string) {
     },
     next: { revalidate: 0 },
   });
-  if (!res.ok) throw new Error(`Fetch failed ${res.status}`);
+  if (!res.ok) throw new Error(`Fetch HTML failed ${res.status}`);
   return res.text();
 }
 
 async function fetchReadable(url: string) {
-  // r.jina.ai mirrors the raw text content of the page w/o JS
   const wrapped = `https://r.jina.ai/http://${url.replace(/^https?:\/\//, "")}`;
   const res = await fetch(wrapped, { next: { revalidate: 0 }, headers: { "User-Agent": UA } });
   if (!res.ok) throw new Error(`Readable fetch failed ${res.status}`);
@@ -53,20 +46,53 @@ function extractCountsFromText(txt: string) {
   return { followers, following };
 }
 
-function extractImageUrls(txt: string) {
-  const avatarMatch = txt.match(/https?:\/\/pbs\.twimg\.com\/profile_images\/[^\s)"']+/i);
-  const bannerMatch = txt.match(/https?:\/\/pbs\.twimg\.com\/profile_banners\/\d+\/\d+\/\d+x\d+/i);
+async function getBannerWithPuppeteer(handle: string): Promise<string | null> {
+  const url = `https://twitter.com/${encodeURIComponent(handle)}`;
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: "networkidle2" });
 
-  if (!bannerMatch) console.log("No banner found. First 1000 chars:", txt.slice(0, 1000));
+  const bannerUrl = await page.evaluate(() => {
+    const img = document.querySelector('img[src*="profile_banners"]');
+    return img ? img.getAttribute("src") : null;
+  });
+
+  await browser.close();
+  return bannerUrl;
+}
+
+async function extractImageUrls(txt: string, handle?: string) {
+  const avatarMatch = txt.match(/https?:\/\/pbs\.twimg\.com\/profile_images\/[^\s)"']+/i);
+
+  const imgBannerMatch = txt.match(/<img[^>]+src="(https?:\/\/pbs\.twimg\.com\/profile_banners\/[^"]+)"/i);
+  let bannerUrl = imgBannerMatch?.[1] || null;
+
+  // Fallback Unavatar
+  if (!bannerUrl && handle) {
+    const unavatarBanner = `https://unavatar.io/twitter/${encodeURIComponent(handle)}/banner`;
+    try {
+      const res = await fetch(unavatarBanner, { method: "HEAD" });
+      if (res.ok && res.headers.get("content-type")?.startsWith("image")) {
+        bannerUrl = unavatarBanner;
+      }
+    } catch {}
+  }
+
+  // Fallback Puppeteer
+  if (!bannerUrl && handle) {
+    try {
+      bannerUrl = await getBannerWithPuppeteer(handle);
+    } catch {}
+  }
+
+  if (!bannerUrl) console.log("No banner found. First 1000 chars:", txt.slice(0, 1000));
   return {
     avatarUrl: avatarMatch?.[0] || null,
-    bannerUrl: bannerMatch?.[0] || null,
+    bannerUrl,
   };
 }
 
 function parseTweetsFromReadable(txt: string, handle: string, limit: number) {
-  // Heuristic parser for r.jina.ai text output of a Twitter profile page.
-  // We consider a "header" line with the handle and a dot separator like "@jack ·".
   const lines = txt.split(/\r?\n/).map((l) => l.trim());
   const items: string[] = [];
   let current: string[] = [];
@@ -81,7 +107,7 @@ function parseTweetsFromReadable(txt: string, handle: string, limit: number) {
         current = [];
         if (items.length >= limit) break;
       }
-      continue; // skip header line
+      continue;
     }
     if (isDivider) {
       if (current.length) {
@@ -92,7 +118,6 @@ function parseTweetsFromReadable(txt: string, handle: string, limit: number) {
       }
       continue;
     }
-    // Accumulate probable tweet text lines, skip obvious UI labels
     if (!/^(Follow|Message|More|Translate post|View|See more|Show more replies)$/i.test(line)) {
       current.push(line);
     }
@@ -105,7 +130,6 @@ function parseTweetsFromReadable(txt: string, handle: string, limit: number) {
 }
 
 function finalizeTweet(parts: string[]) {
-  // Join, collapse spaces, clip to 280 chars
   let t = parts.join(" ");
   t = t.replace(/\s{2,}/g, " ").trim();
   if (!t) return "";
@@ -118,7 +142,6 @@ export async function GET(req: NextRequest) {
   const handle = (searchParams.get("handle") || "").replace(/^@/, "").trim();
   if (!handle) return NextResponse.json({ error: "missing handle" }, { status: 400 });
 
-  // Defaults and fallbacks
   let followers = 0;
   let following = 0;
   let avatarUrl: string | null = null;
@@ -127,7 +150,6 @@ export async function GET(req: NextRequest) {
   let comments: string[] = [];
 
   try {
-    // Prefer mobile pages via r.jina.ai to avoid JS app shell
     const profileReadable = await fetchReadable(`https://mobile.twitter.com/${encodeURIComponent(handle)}?lang=en`);
     const repliesReadable = await fetchReadable(`https://mobile.twitter.com/${encodeURIComponent(handle)}/with_replies?lang=en`);
 
@@ -135,14 +157,13 @@ export async function GET(req: NextRequest) {
     followers = counts.followers;
     following = counts.following;
 
-    const imgs = extractImageUrls(profileReadable);
+    const imgs = await extractImageUrls(profileReadable, handle);
     avatarUrl = imgs.avatarUrl;
     bannerUrl = imgs.bannerUrl;
 
     posts = parseTweetsFromReadable(profileReadable, handle, 15);
     comments = parseTweetsFromReadable(repliesReadable, handle, 15);
 
-    // If avatar is still missing, fall back to unavatar
     if (!avatarUrl) {
       avatarUrl = `https://unavatar.io/twitter/${encodeURIComponent(handle)}`;
     }
@@ -157,19 +178,18 @@ export async function GET(req: NextRequest) {
       last15Comments: comments,
     });
   } catch (e: any) {
-    // Final fallback: still return minimal data with unavatar, so frontend can proceed.
     return NextResponse.json(
-      {
-        handle,
-        followers: 0,
-        following: 0,
-        bannerUrl: null,
-        avatarUrl: `https://unavatar.io/twitter/${encodeURIComponent(handle)}`,
-        last15Posts: [],
-        last15Comments: [],
-        warning: e?.message || "scrape failed",
-      },
-      { status: 200 }
+        {
+          handle,
+          followers: 0,
+          following: 0,
+          bannerUrl: null,
+          avatarUrl: `https://unavatar.io/twitter/${encodeURIComponent(handle)}`,
+          last15Posts: [],
+          last15Comments: [],
+          warning: e?.message || "scrape failed",
+        },
+        { status: 200 }
     );
   }
 }
