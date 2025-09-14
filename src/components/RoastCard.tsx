@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FastAverageColor } from "fast-average-color";
 
 type RoastCardData = {
     username: string;
@@ -27,6 +28,7 @@ const clean = (str?: string) => str?.replace(/^\*+\s*/, "") ?? "";
 
 export default function RoastCard({ onLoaded }: RoastCardProps) {
     const [data, setData] = useState<RoastCardData | null>(null);
+    const [bannerStyle, setBannerStyle] = useState<React.CSSProperties | undefined>(undefined);
 
     useEffect(() => {
         const githubProfileRaw = localStorage.getItem("githubUserProfile");
@@ -60,6 +62,29 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
         if (onLoaded) onLoaded();
     }, [onLoaded]);
 
+    useEffect(() => {
+        if (data) {
+            if (!data.bannerUrl && data.avatarUrl) {
+                const img = new window.Image();
+                img.crossOrigin = "Anonymous";
+                img.src = data.avatarUrl;
+                img.onload = () => {
+                    const fac = new FastAverageColor();
+                    fac.getColorAsync(img).then((color) => {
+                        const gradient = `linear-gradient(135deg, ${color.hex} 0%, #e0f7fa 100%)`;
+                        setBannerStyle({ background: gradient, backgroundPosition: "center" });
+                    }).catch(() => {
+                        setBannerStyle({ background: "#e0f7fa", backgroundPosition: "center" });
+                    });
+                };
+            } else if (data.bannerUrl) {
+                setBannerStyle({ backgroundImage: `url(${data.bannerUrl})`, backgroundPosition: "center" });
+            } else {
+                setBannerStyle(undefined);
+            }
+        }
+    }, [data]);
+
     if (!data) {
         return (
             <span className="text-gray-400 italic block text-center">
@@ -84,7 +109,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                 </div>
                 {/* Banner + Avatar */}
                 <div className="relative mt-2 mb-2 flex flex-col items-center">
-                    <div className="w-[90%] h-16 sm:h-24 bg-cover rounded-2xl" style={data.bannerUrl ? { backgroundImage: `url(${data.bannerUrl})`, backgroundPosition: 'center' } : undefined} />
+                    <div className="w-[90%] h-16 sm:h-25 bg-cover rounded-2xl" style={bannerStyle} />
                     <div className="absolute top-6 sm:top-10 left-1/2 -translate-x-1/2">
                         <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full border-4 border-gray-300 bg-cover flex items-center justify-center overflow-hidden">
                             {data.avatarUrl ? (

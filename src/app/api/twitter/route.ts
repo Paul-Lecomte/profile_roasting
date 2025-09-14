@@ -1,3 +1,5 @@
+// will only work in in an environment that supports the Puppeteer package, e.g. Vercel Edge Functions won't work
+// TODO : find a good way to deploy this API route
 import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer";
 
