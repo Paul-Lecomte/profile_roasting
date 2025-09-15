@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sparticuz/chromium": "^138.0.2",
     "@vercel/analytics": "^1.5.0",
     "fast-average-color": "^9.5.0",
     "html-to-image": "^1.11.13",
     "next": "^15.5.2",
     "puppeteer": "^24.20.0",
+    "puppeteer-core": "^24.20.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
