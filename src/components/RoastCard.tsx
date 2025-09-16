@@ -180,7 +180,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                 </div>
                 <hr className="my-1 sm:my-2 border-gray-300" />
                 {/* Bottom stats */}
-                <div className="flex flex-col sm:flex-row justify-between px-3 sm:px-6 pb-3 sm:pb-4 gap-1 sm:gap-0">
+                <div className="flex flex-row justify-between px-3  pb-3  gap-1 ">
                     <div className="flex flex-col items-center flex-1">
                         <span className="font-bold text-xs sm:text-lg text-gray-700">Weakness</span>
                         <span className="text-gray-600 text-xs sm:text-base">{data.weakness}</span>
