@@ -41,8 +41,8 @@ export default async function getTwitterUserProfile() {
         following,
         avatarUrl: avatar_url,
         bannerUrl,
-        last15Posts: data.last15Posts || [],
-        last15Comments: data.last15Comments || [],
+        last30Posts: data.last30Posts || [],
+        last30Comments: data.last30Comments || [],
       }));
     }
   } catch {}

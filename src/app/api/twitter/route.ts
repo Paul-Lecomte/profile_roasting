@@ -161,8 +161,8 @@ export async function GET(req: NextRequest) {
     avatarUrl = imgs.avatarUrl;
     bannerUrl = imgs.bannerUrl;
 
-    posts = parseTweetsFromReadable(profileReadable, handle, 15);
-    comments = parseTweetsFromReadable(repliesReadable, handle, 15);
+    posts = parseTweetsFromReadable(profileReadable, handle, 30);
+    comments = parseTweetsFromReadable(repliesReadable, handle, 30);
 
     if (!avatarUrl) {
       avatarUrl = `https://unavatar.io/twitter/${encodeURIComponent(handle)}`;
@@ -174,8 +174,8 @@ export async function GET(req: NextRequest) {
       following,
       bannerUrl,
       avatarUrl,
-      last15Posts: posts,
-      last15Comments: comments,
+      last30Posts: posts,
+      last30Comments: comments,
     });
   } catch (e: any) {
     return NextResponse.json(
@@ -185,8 +185,8 @@ export async function GET(req: NextRequest) {
           following: 0,
           bannerUrl: null,
           avatarUrl: `https://unavatar.io/twitter/${encodeURIComponent(handle)}`,
-          last15Posts: [],
-          last15Comments: [],
+          last30Posts: [],
+          last30Comments: [],
           warning: e?.message || "scrape failed",
         },
         { status: 200 }

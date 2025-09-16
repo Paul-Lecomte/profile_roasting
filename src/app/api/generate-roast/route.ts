@@ -19,7 +19,6 @@ function isRateLimited(ip: string) {
 // --- Fin Rate Limiter ---
 
 export async function POST(req: NextRequest) {
-    // Récupération IP (fallback "unknown")
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
     if (isRateLimited(ip)) {
         return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
@@ -36,13 +35,23 @@ Ensure every field is filled with original, creative, and meaningful content.
 Avoid placeholders, empty responses, or repeated filler like just "**".
 Use natural, casual language with humor fitting the roast style.
 Each item should be concise yet expressive.
-Format your output exactly as a list with clear field names followed by a colon and the value.
+Format your output exactly as a list with clear field names followed by the value.
 For the Roast Description, write exactly 3 witty lines.
 Always include these fields exactly with these labels: Name, Title, Ability, Attack, Resistance, Weakness, Bonuses, Special Move, Roast Description.
 `;
 
     const contextLabel = source === 'twitter' ? 'Twitter (X) Profile' : 'GitHub Profile';
-    const twitterFlavor = source === 'twitter' ? `\nGuidance (Twitter flavor):\n- Focus on timeline vibes: memes, threads, hot takes, ratios, reply-guy energy, blue-check flexing, hashtag spam, crypto/NFT/AI buzz, and follower clout.\n- Avoid programming or code jokes unless clearly present in the provided snapshot.\n- Keep references native to Twitter: quote-tweets, dunks, screenshots of notes app apologies, "this you?", and ratio lore.\n` : '';
+
+    // --- Enhanced Twitter flavor ---
+    const twitterFlavor = source === 'twitter' ? `
+Guidance (Twitter flavor):
+- Base the roast on the user's last 10-20 tweets (threads, likes, retweets, replies).
+- Mimic their style: emojis, capitalization, punctuation, hashtags, and meme formats.
+- Pull quirks, obsessions, or recurring meme references directly from their content.
+- Roast Description lines should feel like viral tweet commentary, playful dunking, or light ratio energy.
+- Special Move should reference a viral tweet or typical tweet behavior unique to them.
+- Avoid programming or code references unless explicitly present in tweets.
+` : '';
 
     const lightRoastPrompt = `
 Create a light-hearted, playful parody trading card for this ${source === 'twitter' ? 'Twitter (X) user' : 'GitHub user'}.
@@ -125,20 +134,8 @@ ${promptAddendum}
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`,
             {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    contents: [
-                        {
-                            parts: [
-                                {
-                                    text: prompt,
-                                },
-                            ],
-                        },
-                    ],
-                }),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
             }
         );
         if (!response.ok) {
@@ -153,9 +150,7 @@ ${promptAddendum}
 
     function cleanField(field: string | undefined): string {
         if (!field) return "no data";
-        // Remove stars and trim whitespace
         const cleaned = field.replace(/\*+/g, "").trim();
-        // Fallback to something meaningful if empty
         return cleaned.length > 0 ? cleaned : "no data";
     }
 

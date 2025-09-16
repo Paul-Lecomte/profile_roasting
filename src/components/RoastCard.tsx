@@ -1,6 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { FastAverageColor } from "fast-average-color";
 
+function getRarity(hp: number): string {
+    if (hp >= 90) return "legendary";
+    if (hp >= 70) return "epic";
+    if (hp >= 50) return "rare";
+    if (hp >= 30) return "uncommon";
+    return "common";
+}
+
+function getRarityColor(rarity: string): string {
+    switch (rarity) {
+        case "legendary": return "#FFD700";
+        case "epic": return "#A259FF";
+        case "rare": return "#38BDF8";
+        case "uncommon": return "#34D399";
+        default: return "#D1D5DB";
+    }
+}
+
 type RoastCardData = {
     username: string;
     handle: string;
@@ -10,6 +28,7 @@ type RoastCardData = {
     bannerUrl?: string | null;
     category?: string;
     hp?: number;
+    rarity?: string;
     ability?: string;
     abilityDesc?: string;
     attack?: string;
@@ -49,7 +68,8 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             avatarUrl: profile.avatar_url,
             bannerUrl: twitterExtended?.bannerUrl ?? null,
             category: clean(roastCard.title),
-            hp: profile.followers * 2 + profile.following,
+            hp: Math.min(Math.ceil(profile.followers /200), 100),
+            rarity: getRarity(Math.min(Math.ceil(profile.followers / 150), 100)),
             ability: clean(roastCard.ability),
             abilityDesc: clean(roastCard.description),
             attack: clean(roastCard.attack),
@@ -123,8 +143,18 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                     </div>
                 </div>
                 {/* Followers / Following */}
-                <div className="flex justify-between px-4 sm:px-8 mt-8 text-gray-400 text-xs sm:text-base">
+                <div className="flex justify-between px-4 sm:px-8 mt-8 text-gray-400 text-xs sm:text-base items-center">
                     <span>{data.followers} followers</span>
+                    <span
+                        className="font-bold py-1 px-3 sm:px-4 rounded-full text-xs sm:text-sm shadow"
+                        style={{
+                            background: getRarityColor(data.rarity ?? "common"),
+                            color: data.rarity === "legendary" ? "#000" : "#fff",
+                            border: "2px solid #fff",
+                        }}
+                        >
+                        {data.rarity}
+                    </span>
                     <span>{data.following} following</span>
                 </div>
                 {/* Username */}
