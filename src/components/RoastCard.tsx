@@ -197,7 +197,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
             </div>
             <style jsx global>{`
                 .roast-card-responsive {
-                    width: 98vw;
+                    width: 100%;
                     max-width: 380px;
                     height: auto;
                     max-height: 120rem;
@@ -205,7 +205,7 @@ export default function RoastCard({ onLoaded }: RoastCardProps) {
                 @media (min-width: 640px) {
                     .roast-card-responsive {
                         width: 100%;
-                        max-width: 500px;
+                        max-width: 380px;
                         max-height: 120rem;
                     }
                 }
