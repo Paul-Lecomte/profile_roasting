@@ -10,7 +10,7 @@ export const metadata = {
     icons: {
         icon: "/flammingoctopus.ico",
     },
-  description: "Generate a funny roast card for your GitHub or X profile",
+  description: "Generate a funny roast card for your GitHub or X profile completely free.",
   keywords: [
     "GitHub",
     "Roast Card", "Twitter", "X",
@@ -21,19 +21,19 @@ export const metadata = {
   ],
   openGraph: {
     title: "GitHub Roast Card",
-    description: "Generate a funny roast card for your GitHub profile",
-    url: "https://github-roast-card.vercel.app",
+    description: "Generate a funny roast card for your GitHub or X profile completely free.",
+    url: "https://profile-roasting.vercel.app",
     type: "website",
     images: [
       {
-        url: "https://github-roast-card.vercel.app/og-image.png",
+        url: "https://profile-roasting.vercel.app/public/example-roast-card.png",
         width: 1200,
         height: 630,
         alt: "GitHub Roast Card OG Image",
       },
     ],
   },
-  metadataBase: new URL("https://github-roast-card.vercel.app"),
+  metadataBase: new URL("https://profile-roasting.vercel.app"),
   alternates: {
     canonical: "/",
   },
